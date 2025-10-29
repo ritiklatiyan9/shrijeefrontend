@@ -1,10 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
-import Header from './pages/Header';
+import Header from './Pages/Header/Header';
 import HeroSection from './pages/HeroSection';
 import PropertySearch from './pages/PropertySearch';
 import NearbyProperties from './pages/NearbyProperties';
-import Footer from './pages/Footer'; // Add a simple footer
+import Footer from './Pages/Footer/Footer';// Add a simple footer
 import Marquee from './pages/Marquee';
 import HorizontalScrollCarousel from './pages/HorizontalScrollCarousel';
 
