@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Loader2, RefreshCcw, TrendingUp, Users } from "lucide-react";
 
-const API_BASE_URL = "http://localhost:5000/api/v1/plots";
+const API_BASE_URL = "http://13.127.229.155:5000/api/v1/plots";
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
