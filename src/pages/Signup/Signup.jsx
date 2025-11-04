@@ -1,5 +1,6 @@
+// SignUp.js
 import { useState } from 'react';
-import { Mail, Lock, User, Phone, Calendar, Home, Building, IndianRupee } from 'lucide-react';
+import { Mail, Lock, User, Phone, Calendar, Home, Building, IndianRupee, Camera } from 'lucide-react'; // Added Camera icon
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
@@ -21,7 +22,8 @@ function SignUp() {
       accountNumber: '',
       ifscCode: '',
       accountHolderName: ''
-    }
+    },
+    profileImage: null // Added state for the image file
   });
 
   const [errors, setErrors] = useState({});
@@ -45,6 +47,12 @@ function SignUp() {
           ...formData.bankDetails,
           [name]: value
         }
+      });
+    } else if (name === 'profileImage') {
+      // Handle file input specifically
+      setFormData({
+        ...formData,
+        [name]: e.target.files[0] // Store the file object
       });
     } else {
       setFormData({
@@ -125,6 +133,19 @@ function SignUp() {
       newErrors.accountHolderName = 'Account holder name is required';
     }
 
+    // Optional: Add validation for the image file (e.g., type, size)
+    if (formData.profileImage) {
+      const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png'];
+      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+
+      if (!allowedTypes.includes(formData.profileImage.type)) {
+        newErrors.profileImage = 'Only JPG, JPEG, and PNG files are allowed.';
+      }
+      if (formData.profileImage.size > maxSizeInBytes) {
+        newErrors.profileImage = 'File size must be less than 5MB.';
+      }
+    }
+
     return newErrors;
   };
 
@@ -139,7 +160,26 @@ function SignUp() {
     setErrors({});
 
     try {
-      const result = await register(formData);
+      // Use FormData to send both file and other data
+      const submitData = new FormData();
+      submitData.append('email', formData.email);
+      submitData.append('username', formData.username);
+      submitData.append('password', formData.password);
+      submitData.append('confirmPassword', formData.confirmPassword);
+      submitData.append('sponsorId', formData.sponsorId);
+      submitData.append('personalInfo[firstName]', formData.personalInfo.firstName);
+      submitData.append('personalInfo[lastName]', formData.personalInfo.lastName);
+      submitData.append('personalInfo[phone]', formData.personalInfo.phone);
+      submitData.append('personalInfo[dateOfBirth]', formData.personalInfo.dateOfBirth);
+      submitData.append('personalInfo[address]', formData.personalInfo.address);
+      if (formData.profileImage) {
+        submitData.append('profileImage', formData.profileImage); // Append the file
+      }
+      submitData.append('bankDetails[accountNumber]', formData.bankDetails.accountNumber);
+      submitData.append('bankDetails[ifscCode]', formData.bankDetails.ifscCode);
+      submitData.append('bankDetails[accountHolderName]', formData.bankDetails.accountHolderName);
+
+      const result = await register(submitData); // Pass FormData object
       if (result.success) {
         console.log("Registration successful, redirecting...");
         navigate('/login');
@@ -282,6 +322,27 @@ function SignUp() {
                     />
                   </div>
                   {errors.address && <p className="mt-1 text-sm text-red-600">{errors.address}</p>}
+                </div>
+
+                {/* Profile Image Input */}
+                <div className="md:col-span-2">
+                  <label htmlFor="profileImage" className="block text-sm font-medium text-gray-700 mb-1">
+                    Profile Image (Optional)
+                  </label>
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <Camera className="h-5 w-5 text-gray-400" />
+                    </div>
+                    <input
+                      id="profileImage"
+                      name="profileImage"
+                      type="file"
+                      accept="image/*" // Accept only image files
+                      onChange={handleChange}
+                      className="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                    />
+                  </div>
+                  {errors.profileImage && <p className="mt-1 text-sm text-red-600">{errors.profileImage}</p>}
                 </div>
               </div>
             </div>
