@@ -109,3 +109,58 @@
   width: 100vw; 
   box-sizing: border-box; 
 } */
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+/* React Flow edge and handle styling */
+.react-flow__edge-path {
+  stroke: #000 !important;
+  stroke-width: 3px !important;
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  stroke: #2563eb !important;
+}
+
+/* Hide the default handles if you don't want them visible */
+.react-flow__handle {
+  opacity: 0;
+  width: 0;
+  height: 0;
+  border: none;
+}
+
+/* Alternatively, style the handles to make them visible */
+.react-flow__handle-top {
+  top: -8px;
+}
+
+.react-flow__handle-bottom {
+  bottom: -8px;
+}
+
+.react-flow__node {
+  background: transparent;
+  border: none;
+}
+
+.react-flow__node-default {
+  padding: 0;
+  background: transparent;
+  border: none;
+  width: auto !important;
+  height: auto !important;
+}
+
+/* Ensure the connection line is visible */
+.react-flow__connectionline {
+  z-index: 1000;
+  stroke: #000;
+  stroke-width: 2;
+}

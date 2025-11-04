@@ -3,9 +3,16 @@ import { ArrowLeft, ArrowRight, Search } from 'lucide-react';
 import Header from './Header/Header'; // Adjust path as needed based on your folder structure
 import Footer from './Footer/Footer'; // Adjust path as needed based on your folder structure
 
+const customFontStyle = {
+  fontFamily: "'Neue Montreal Regular', sans-serif",
+  fontWeight: 600,
+  fontStyle: "normal",
+};
+
+
 function Home() {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div style={customFontStyle} className="flex flex-col min-h-screen">
       {/* Render the Header directly without a wrapper */}
       
 
@@ -35,7 +42,7 @@ function Home() {
                 </span>
               </div>
               <h1 className="text-4xl md:text-6xl font-extrabold text-white leading-tight mb-6">
-                Your real estate journey starts here
+                Your real estate <span className='text-green-500'>journey</span> starts here
               </h1>
               <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-2xl">
                 Discover properties that match your lifestyle from city condos to suburban homes, we've got you covered.
