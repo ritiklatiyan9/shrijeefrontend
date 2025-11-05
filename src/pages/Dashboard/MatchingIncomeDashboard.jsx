@@ -304,7 +304,7 @@ const MyIncomeDashboard = () => {
         <div className="mt-6 bg-blue-50 border-l-4 border-blue-400 p-4 rounded">
           <p className="text-sm text-blue-700">
             <strong>💡 How It Works:</strong> <br />
-            <b>Personal Sale Income (5%):</b> Earn 5% commission from your direct plot purchases. <br />
+            <b>Personal Sale Income (5%):</b> Earn 5% commission from your direct plots purchases. <br />
             <b>Matching Bonus (5%):</b> Earn 5% on the balanced amount between your left and right team sales.
           </p>
         </div>
