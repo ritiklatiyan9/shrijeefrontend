@@ -1,3 +1,5 @@
+// components/AdminPlotManagement.js
+
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
@@ -12,16 +14,18 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, X, Check, XCircle } from "lucide-react";
+import { Loader2, X, Check, XCircle, Plus, Trash2 } from "lucide-react";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogFooter,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-const API_BASE_URL = "http://13.127.229.155:5000/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const AdminPlotManagement = () => {
   const { user, loading: authLoading } = useAuth();
@@ -42,6 +46,18 @@ const AdminPlotManagement = () => {
   const [selectedPlot, setSelectedPlot] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [actionResponse, setActionResponse] = useState(null);
+  const [paymentFormOpen, setPaymentFormOpen] = useState(false); // Toggle for payment form
+  const [paymentDetails, setPaymentDetails] = useState([{
+    installmentNumber: 1,
+    amount: 0,
+    paidDate: new Date().toISOString().split('T')[0],
+    receiptNo: "",
+    paymentMode: "cash",
+    transactionId: "",
+    transactionDate: new Date().toISOString().split('T')[0],
+    notes: ""
+  }]);
+  const [totalPaidAmount, setTotalPaidAmount] = useState(0);
 
   const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -129,13 +145,23 @@ const AdminPlotManagement = () => {
     }
   }, [filters]);
 
+  // Calculate total paid amount
+  useEffect(() => {
+    const total = paymentDetails.reduce((sum, detail) => sum + (parseFloat(detail.amount) || 0), 0);
+    setTotalPaidAmount(total);
+  }, [paymentDetails]);
+
   const handleApproveBooking = async (plotId) => {
     setActionLoading(true);
     setActionResponse(null);
     try {
-      const response = await apiClient.post(`/admin/plots/${plotId}/approve`);
+      const response = await apiClient.post(`/admin/plots/${plotId}/approve`, {
+        paymentDetails, // Send the array of payment details
+        totalPaidAmount, // Send the calculated total
+        finalStatus: "booked" // Optional: you can let admin choose the final status
+      });
       if (response.data.success) {
-        setActionResponse({ success: true, message: "Booking approved successfully ✅" });
+        setActionResponse({ success: true, message: "Booking approved successfully with payment details ✅" });
         setPlots((prev) =>
           prev.map((p) =>
             p._id === plotId
@@ -149,6 +175,7 @@ const AdminPlotManagement = () => {
           status: "booked",
           bookingDetails: { ...prev.bookingDetails, status: "approved" },
         }));
+        setPaymentFormOpen(false); // Close the form after successful approval
       }
     } catch (error) {
       const msg = error.response?.data?.message || "Approval failed ❌";
@@ -193,6 +220,39 @@ const AdminPlotManagement = () => {
     if (status === "available") return "bg-green-500 text-white";
     if (status === "sold") return "bg-purple-500 text-white";
     return "bg-gray-300 text-black";
+  };
+
+  // Add a new installment row
+  const addInstallment = () => {
+    setPaymentDetails(prev => [
+      ...prev,
+      {
+        installmentNumber: prev.length + 1,
+        amount: 0,
+        paidDate: new Date().toISOString().split('T')[0],
+        receiptNo: "",
+        paymentMode: "cash",
+        transactionId: "",
+        transactionDate: new Date().toISOString().split('T')[0],
+        notes: ""
+      }
+    ]);
+  };
+
+  // Remove an installment row
+  const removeInstallment = (index) => {
+    if (paymentDetails.length > 1) {
+      setPaymentDetails(prev => prev.filter((_, i) => i !== index));
+    }
+  };
+
+  // Update a specific field in an installment
+  const updateInstallmentField = (index, field, value) => {
+    setPaymentDetails(prev => {
+      const updated = [...prev];
+      updated[index][field] = value;
+      return updated;
+    });
   };
 
   if (authLoading)
@@ -330,7 +390,7 @@ const AdminPlotManagement = () => {
 
       {/* Modal for details + approval actions */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-6xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-2xl font-bold flex justify-between">
               <span>
@@ -413,7 +473,7 @@ const AdminPlotManagement = () => {
                   {selectedPlot.status === "pending" && (
                     <div className="flex gap-3 mt-4">
                       <Button
-                        onClick={() => handleApproveBooking(selectedPlot._id)}
+                        onClick={() => setPaymentFormOpen(true)} // Open the payment form
                         disabled={actionLoading}
                       >
                         {actionLoading ? (
@@ -421,7 +481,7 @@ const AdminPlotManagement = () => {
                         ) : (
                           <Check className="h-4 w-4 mr-1" />
                         )}
-                        Approve Booking
+                        Approve Booking & Enter Payment Details
                       </Button>
                       <Button
                         variant="outline"
@@ -437,6 +497,147 @@ const AdminPlotManagement = () => {
                       </Button>
                     </div>
                   )}
+                </div>
+              )}
+
+              {/* Payment Details Form */}
+              {paymentFormOpen && (
+                <div className="border-t pt-4">
+                  <h3 className="font-semibold mb-2">Enter Payment Details</h3>
+                  <p className="text-sm text-gray-500 mb-3">
+                    Fill out the payment schedule for this booking.
+                  </p>
+
+                  {/* Payment Schedule Table */}
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHead>S.N.</TableHead>
+                        <TableHead>Payment Date</TableHead>
+                        <TableHead>Amount</TableHead>
+                        <TableHead>Receipt No.</TableHead>
+                        <TableHead>Payment Mode</TableHead>
+                        <TableHead>Cheque / DD / NEFT / RTGS No.</TableHead>
+                        <TableHead>Date</TableHead>
+                        <TableHead>Notes</TableHead>
+                        <TableHead>Action</TableHead>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {paymentDetails.map((installment, index) => (
+                        <TableRow key={index}>
+                          <TableCell>{index + 1}</TableCell>
+                          <TableCell>
+                            <Input
+                              type="date"
+                              value={installment.paidDate}
+                              onChange={(e) => updateInstallmentField(index, 'paidDate', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="number"
+                              value={installment.amount}
+                              onChange={(e) => updateInstallmentField(index, 'amount', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              value={installment.receiptNo}
+                              onChange={(e) => updateInstallmentField(index, 'receiptNo', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Select
+                              value={installment.paymentMode}
+                              onValueChange={(value) => updateInstallmentField(index, 'paymentMode', value)}
+                            >
+                              <SelectTrigger className="w-full">
+                                <SelectValue placeholder="Select Mode" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="cash">Cash</SelectItem>
+                                <SelectItem value="cheque">Cheque</SelectItem>
+                                <SelectItem value="rtgs">RTGS</SelectItem>
+                                <SelectItem value="neft">NEFT</SelectItem>
+                                <SelectItem value="upi">UPI</SelectItem>
+                                <SelectItem value="dd">DD</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              value={installment.transactionId}
+                              onChange={(e) => updateInstallmentField(index, 'transactionId', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              type="date"
+                              value={installment.transactionDate}
+                              onChange={(e) => updateInstallmentField(index, 'transactionDate', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Input
+                              value={installment.notes}
+                              onChange={(e) => updateInstallmentField(index, 'notes', e.target.value)}
+                              className="w-full"
+                            />
+                          </TableCell>
+                          <TableCell>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeInstallment(index)}
+                              disabled={paymentDetails.length <= 1}
+                            >
+                              <Trash2 className="h-4 w-4 text-red-500" />
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+
+                  <div className="flex justify-between items-center mt-3">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={addInstallment}
+                    >
+                      <Plus className="h-4 w-4 mr-1" />
+                      Add Installment
+                    </Button>
+                    <div className="text-right">
+                      <strong>Total Paid Amount:</strong> ₹{totalPaidAmount.toLocaleString()}
+                    </div>
+                  </div>
+
+                  <DialogFooter className="mt-4">
+                    <Button
+                      variant="outline"
+                      onClick={() => setPaymentFormOpen(false)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => handleApproveBooking(selectedPlot._id)}
+                      disabled={actionLoading}
+                    >
+                      {actionLoading ? (
+                        <Loader2 className="h-4 w-4 animate-spin mr-1" />
+                      ) : (
+                        <Check className="h-4 w-4 mr-1" />
+                      )}
+                      Confirm & Approve
+                    </Button>
+                  </DialogFooter>
                 </div>
               )}
             </div>

@@ -63,7 +63,7 @@ function Header() {
 
   return (
     <header style={customFontStyle} className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-r from-zinc-900 via-indigo-900 to-zinc-900 shadow-lg">
-      <nav className="container mx-auto px-5 py-3 flex justify-between items-center">
+      <nav className="container mx-auto px-5 py-2 flex justify-between items-center">
         {/* Logo Section */}
         <Link
           to="/"
@@ -72,7 +72,7 @@ function Header() {
           <img
             src="/src/assets/logo.png"
             alt="Shree Jee Real Estate"
-            className="w-11 h-11 rounded-full border-2 border-white shadow-md"
+            className="w-16 h-14 rounded-full  shadow-md"
           />
           <span className="font-bold text-xl tracking-wide">
             Shree Jee <span className="text-lime-50">Real Estate</span>

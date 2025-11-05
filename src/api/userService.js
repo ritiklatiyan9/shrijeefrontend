@@ -1,7 +1,7 @@
 // api/userService.js
 import axios from 'axios';
 
-const API_BASE_URL =  'http://13.127.229.155:5000/api/v1';
+const API_BASE_URL =  'http://localhost:5000/api/v1';
 
 // Create axios instance with default config
 const apiClient = axios.create({
