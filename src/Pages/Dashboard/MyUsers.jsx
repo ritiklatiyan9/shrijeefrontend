@@ -167,7 +167,7 @@ const BinaryTreeComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://13.127.229.155:5000/api/v1/users/binary-tree', {
+      const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/binary-tree', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json',

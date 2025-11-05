@@ -15,7 +15,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-const API_BASE_URL = "http://13.127.229.155:5000/api/v1/plots";
+const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
