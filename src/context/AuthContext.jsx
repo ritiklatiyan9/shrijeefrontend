@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'; // Import useNavigate
 
 const AuthContext = createContext();
 
-const API_BASE_URL = 'http://13.127.229.155:5000/api/v1/users';
+const API_BASE_URL = 'https://shreejeebackend.onrender.com/api/v1/users';
 
 // Create axios instance with default config
 const apiClient = axios.create({

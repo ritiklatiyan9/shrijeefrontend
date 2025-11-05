@@ -9,7 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Plus, X, MapPin, Ruler, DollarSign, Home, AlertCircle } from "lucide-react";
 import { useAuth } from '../../context/AuthContext';
 
-const API_BASE_URL = 'http://13.127.229.155:5000/api/v1/plots/admin/plots';
+const API_BASE_URL = 'https://shreejeebackend.onrender.com/api/v1/plots/admin/plots';
 
 const CreatePlotForm = () => {
   const { user } = useAuth();
