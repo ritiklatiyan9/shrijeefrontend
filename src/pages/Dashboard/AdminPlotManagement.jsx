@@ -25,7 +25,7 @@ import {
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-const API_BASE_URL = "http://localhost:5000/api/v1/plots";
+const API_BASE_URL = "http://13.127.229.155:5000/api/v1/plots";
 
 const AdminPlotManagement = () => {
   const { user, loading: authLoading } = useAuth();
