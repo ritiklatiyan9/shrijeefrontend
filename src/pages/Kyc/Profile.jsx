@@ -684,11 +684,11 @@ const ProfilePage = () => {
               {/* Stats Cards */}
              
            
-              <Card className="shadow-lg border-0 bg-gradient-to-br from-purple-900 to-pink-800 text-white">
+              <Card className="shadow-sm bg-gradient-to-br from-zinc-100 to-green-400 text-black border-2">
                 <CardContent className="p-6">
                   <div className="flex items-center justify-between">
                     <div>
-                      <p className="text-purple-100 text-sm font-medium">Current Rank</p>
+                      <p className="text-black text-sm font-medium">Current Rank</p>
                       <h3 className="text-3xl font-bold mt-2">{user.rank?.current || 'Bronze'}</h3>
                     </div>
                     <FaGift className="text-5xl text-purple-200 opacity-50" />

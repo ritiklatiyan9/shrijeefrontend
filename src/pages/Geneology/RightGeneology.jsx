@@ -40,7 +40,7 @@ const GeneologyRight = () => {
     const fetchRightGenealogy = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://13.127.229.155:5000/api/v1/users/right-genealogy', {
+        const response = await fetch('http://localhost:5000/api/v1/users/right-genealogy', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

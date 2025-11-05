@@ -12,7 +12,7 @@ import { Progress } from '../../components/ui/progress';
 import { Separator } from '../../components/ui/separator';
 import { Badge } from '../../components/ui/badge';
 
-const API_BASE_URL = 'http://13.127.229.155:5000/api/v1';
+const API_BASE_URL = 'http://localhost:5000/api/v1';
 
 const KYCPage = () => {
   const navigate = useNavigate();

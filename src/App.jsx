@@ -34,6 +34,11 @@ import RightTeamBookings from './Pages/Geneology/RightTeamBooking';
 import MyBookings from './Pages/Geneology/MyBookings';
 import AdminPlotManagement from './Pages/Dashboard/AdminPlotManagement';
 import AdminBookings from './Pages/Dashboard/AdminBookings';
+
+import MatchingIncomeDashboard from './Pages/Dashboard/MatchingIncomeDashboard';
+import AdminApproveIncome from './Pages/Dashboard/AdminApproveIncome';
+import TeamIncomeDashboard from './Pages/Dashboard/TeamIncomeDashboard';
+
 import './fonts.css';
 // Protected Route Component
 function ProtectedRoute({ children }) {
@@ -130,17 +135,21 @@ function App() {
             } />
 
             {/* Auth Routes - Only accessible when NOT logged in */}
-            <Route path="/login" element={
-              <PublicRoute>
-                <Login />
-              </PublicRoute>
-            } />
-            
-            <Route path="/signup" element={
-              <PublicRoute>
-                <Signup />
-              </PublicRoute>
-            } />
+      <Route path="/login" element={
+  <PublicRoute>
+    <PublicLayout>
+      <Login />
+    </PublicLayout>
+  </PublicRoute>
+} />
+
+<Route path="/signup" element={
+  <PublicRoute>
+    <PublicLayout>
+      <Signup />
+    </PublicLayout>
+  </PublicRoute>
+} />
 
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={
@@ -170,6 +179,9 @@ function App() {
 
               <Route path="admin-plot-management" element={<AdminPlotManagement />} />
               <Route path="admin-bookings" element={<AdminBookings />} />
+              <Route path="matching-income" element={<MatchingIncomeDashboard />} />
+              <Route path="admin-approve-income" element={<AdminApproveIncome />} />
+              <Route path="team-income" element={<TeamIncomeDashboard />} />
              
             </Route>
 

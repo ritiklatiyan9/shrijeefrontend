@@ -1,11 +1,21 @@
+// components/AdminBookings.js (Updated)
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, RefreshCcw, TrendingUp, Users } from "lucide-react";
+import { Loader2, RefreshCcw, TrendingUp, Users, ChevronDown, ChevronUp } from "lucide-react";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
-const API_BASE_URL = "http://13.127.229.155:5000/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -16,6 +26,7 @@ const AdminBookings = () => {
     left: { bookings: 0, collection: 0 },
     right: { bookings: 0, collection: 0 }
   });
+  const [expandedRows, setExpandedRows] = useState(new Set()); // Track expanded rows
 
   const api = axios.create({
     baseURL: API_BASE_URL,
@@ -72,6 +83,38 @@ const AdminBookings = () => {
 
   const currentStats = getStatsForTab();
 
+  // Toggle row expansion
+  const toggleRow = (plotId) => {
+    setExpandedRows(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(plotId)) {
+        newSet.delete(plotId);
+      } else {
+        newSet.add(plotId);
+      }
+      return newSet;
+    });
+  };
+
+  // Format currency
+  const formatCurrency = (amount) => {
+    return new Intl.NumberFormat("en-IN", {
+      style: "currency",
+      currency: "INR",
+      maximumFractionDigits: 0,
+    }).format(amount || 0);
+  };
+
+  // Format date
+  const formatDate = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-IN", {
+      day: "2-digit",
+      month: "short",
+      year: "numeric",
+    });
+  };
+
   return (
     <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
       {/* Header */}
@@ -94,7 +137,7 @@ const AdminBookings = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600">Total Collection</p>
                 <p className="text-3xl font-bold text-blue-600 mt-2">
-                  ₹{stats.total.collection.toLocaleString()}
+                  {formatCurrency(stats.total.collection)}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   {stats.total.bookings} bookings
@@ -113,7 +156,7 @@ const AdminBookings = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600">Left Team Collection</p>
                 <p className="text-3xl font-bold text-green-600 mt-2">
-                  ₹{stats.left.collection.toLocaleString()}
+                  {formatCurrency(stats.left.collection)}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   {stats.left.bookings} bookings
@@ -132,7 +175,7 @@ const AdminBookings = () => {
               <div>
                 <p className="text-sm font-medium text-gray-600">Right Team Collection</p>
                 <p className="text-3xl font-bold text-purple-600 mt-2">
-                  ₹{stats.right.collection.toLocaleString()}
+                  {formatCurrency(stats.right.collection)}
                 </p>
                 <p className="text-sm text-gray-500 mt-1">
                   {stats.right.bookings} bookings
@@ -204,95 +247,150 @@ const AdminBookings = () => {
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="min-w-full border text-sm">
-                <thead className="bg-gray-100 text-gray-700">
-                  <tr>
-                    <th className="p-3 text-left font-semibold">Plot Details</th>
-                    <th className="p-3 text-left font-semibold">Buyer Info</th>
-                    <th className="p-3 text-left font-semibold">Team</th>
-                    <th className="p-3 text-left font-semibold">Location</th>
-                    <th className="p-3 text-left font-semibold">Pricing</th>
-                    <th className="p-3 text-left font-semibold">Payment</th>
-                    <th className="p-3 text-left font-semibold">Status</th>
-                  </tr>
-                </thead>
-                <tbody>
+              <Table>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead></TableHead> {/* For Expand/Collapse Icon */}
+                    <TableHead>Plot Details</TableHead>
+                    <TableHead>Buyer Info</TableHead>
+                    <TableHead>Team</TableHead>
+                    <TableHead>Location</TableHead>
+                    <TableHead>Pricing</TableHead>
+                    <TableHead>Payment</TableHead>
+                    <TableHead>Status</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
                   {bookings.map((plot) => {
                     // ✅ FIXED: Access position from root level, not personalInfo
                     const position = plot.bookingDetails?.buyerId?.position;
-                    
+                    const isExpanded = expandedRows.has(plot._id);
+
                     return (
-                      <tr key={plot._id} className="border-b hover:bg-gray-50 transition-colors">
-                        <td className="p-3">
-                          <div className="font-semibold text-sm text-gray-800">
-                            {plot.plotName}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            #{plot.plotNumber}
-                          </div>
-                          <div className="text-xs text-gray-500 mt-1">
-                            {plot.size?.value} {plot.size?.unit}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="text-sm font-medium text-gray-800">
-                            {plot.bookingDetails?.buyerId?.personalInfo?.firstName}{" "}
-                            {plot.bookingDetails?.buyerId?.personalInfo?.lastName}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {plot.bookingDetails?.buyerId?.email}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <Badge
-                            className={
-                              position === "left"
-                                ? "bg-green-100 text-green-800"
-                                : position === "right"
-                                ? "bg-purple-100 text-purple-800"
-                                : "bg-gray-100 text-gray-800"
-                            }
-                          >
-                            {position?.toUpperCase() || "N/A"}
-                          </Badge>
-                        </td>
-                        <td className="p-3 text-sm">
-                          <div className="text-gray-800">
-                            {plot.siteLocation?.address?.city}
-                          </div>
-                          <div className="text-xs text-gray-500">
-                            {plot.siteLocation?.siteName}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="text-sm font-semibold text-gray-800">
-                            ₹{plot.pricing?.totalPrice?.toLocaleString()}
-                          </div>
-                        </td>
-                        <td className="p-3">
-                          <div className="text-sm font-semibold text-green-600">
-                            ₹{plot.bookingDetails?.totalPaidAmount?.toLocaleString() || 0}
-                          </div>
-                         
-                        </td>
-                        <td className="p-3">
-                          <Badge
-                            className={
-                              plot.bookingDetails?.status === "approved"
-                                ? "bg-green-100 text-green-800"
-                                : plot.bookingDetails?.status === "rejected"
-                                ? "bg-red-100 text-red-800"
-                                : "bg-yellow-100 text-yellow-800"
-                            }
-                          >
-                            {plot.bookingDetails?.status?.toUpperCase()}
-                          </Badge>
-                        </td>
-                      </tr>
+                      <React.Fragment key={plot._id}>
+                        <TableRow className="border-b hover:bg-gray-50 transition-colors">
+                          <TableCell className="p-3">
+                            <Button
+                              variant="ghost"
+                              size="sm"
+                              onClick={() => toggleRow(plot._id)}
+                              className="p-0 h-auto"
+                            >
+                              {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                            </Button>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <div className="font-semibold text-sm text-gray-800">
+                              {plot.plotName}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              #{plot.plotNumber}
+                            </div>
+                            <div className="text-xs text-gray-500 mt-1">
+                              {plot.size?.value} {plot.size?.unit}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <div className="text-sm font-medium text-gray-800">
+                              {plot.bookingDetails?.buyerId?.personalInfo?.firstName}{" "}
+                              {plot.bookingDetails?.buyerId?.personalInfo?.lastName}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {plot.bookingDetails?.buyerId?.email}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <Badge
+                              className={
+                                position === "left"
+                                  ? "bg-green-100 text-green-800"
+                                  : position === "right"
+                                  ? "bg-purple-100 text-purple-800"
+                                  : "bg-gray-100 text-gray-800"
+                              }
+                            >
+                              {position?.toUpperCase() || "N/A"}
+                            </Badge>
+                          </TableCell>
+                          <TableCell className="p-3 text-sm">
+                            <div className="text-gray-800">
+                              {plot.siteLocation?.address?.city}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              {plot.siteLocation?.siteName}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <div className="text-sm font-semibold text-gray-800">
+                              {formatCurrency(plot.pricing?.totalPrice)}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <div className="text-sm font-semibold text-green-600">
+                              {formatCurrency(plot.bookingDetails?.totalPaidAmount)}
+                            </div>
+                          </TableCell>
+                          <TableCell className="p-3">
+                            <Badge
+                              className={
+                                plot.bookingDetails?.status === "approved"
+                                  ? "bg-green-100 text-green-800"
+                                  : plot.bookingDetails?.status === "rejected"
+                                  ? "bg-red-100 text-red-800"
+                                  : "bg-yellow-100 text-yellow-800"
+                              }
+                            >
+                              {plot.bookingDetails?.status?.toUpperCase()}
+                            </Badge>
+                          </TableCell>
+                        </TableRow>
+                        {/* Collapsible Payment Details Row */}
+                        {isExpanded && (
+                          <TableRow className="bg-gray-100">
+                            <TableCell colSpan="8" className="p-0">
+                              <div className="p-4 border-t border-gray-200">
+                                <h4 className="font-semibold mb-3">Payment Schedule</h4>
+                                {plot.bookingDetails?.paymentSchedule && plot.bookingDetails.paymentSchedule.length > 0 ? (
+                                  <Table>
+                                    <TableHeader>
+                                      <TableRow className="bg-gray-200">
+                                        <TableHead className="text-xs font-medium">S.N.</TableHead>
+                                        <TableHead className="text-xs font-medium">Payment Date</TableHead>
+                                        <TableHead className="text-xs font-medium">Amount</TableHead>
+                                        <TableHead className="text-xs font-medium">Receipt No.</TableHead>
+                                        <TableHead className="text-xs font-medium">Payment Mode</TableHead>
+                                        <TableHead className="text-xs font-medium">Transaction ID</TableHead>
+                                        <TableHead className="text-xs font-medium">Transaction Date</TableHead>
+                                        <TableHead className="text-xs font-medium">Notes</TableHead>
+                                      </TableRow>
+                                    </TableHeader>
+                                    <TableBody>
+                                      {plot.bookingDetails.paymentSchedule.map((installment, idx) => (
+                                        <TableRow key={idx}>
+                                          <TableCell className="text-sm">{idx + 1}</TableCell>
+                                          <TableCell className="text-sm">{formatDate(installment.paidDate)}</TableCell>
+                                          <TableCell className="text-sm font-medium">{formatCurrency(installment.amount)}</TableCell>
+                                          <TableCell className="text-sm">{installment.receiptNo || "N/A"}</TableCell>
+                                          <TableCell className="text-sm">{installment.paymentMode?.toUpperCase() || "CASH"}</TableCell>
+                                          <TableCell className="text-sm">{installment.transactionId || "N/A"}</TableCell>
+                                          <TableCell className="text-sm">{formatDate(installment.transactionDate)}</TableCell>
+                                          <TableCell className="text-sm">{installment.notes || "N/A"}</TableCell>
+                                        </TableRow>
+                                      ))}
+                                    </TableBody>
+                                  </Table>
+                                ) : (
+                                  <p className="text-sm text-gray-500 italic">No payment details recorded yet.</p>
+                                )}
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        )}
+                      </React.Fragment>
                     );
                   })}
-                </tbody>
-              </table>
+                </TableBody>
+              </Table>
             </div>
           )}
         </CardContent>
