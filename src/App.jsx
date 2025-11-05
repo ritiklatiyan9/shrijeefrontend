@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } /* Add useAuth here */ from './context/AuthContext';
-import Header from './Pages/Header/Header';
+import Header from './Pages/Header/Header.jsx';
 import DashboardLayout from './Pages/Home/DashboardLayout.jsx';
 
 // Public Pages
