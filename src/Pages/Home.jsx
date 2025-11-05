@@ -2,6 +2,7 @@ import { ArrowLeft, ArrowRight, Search } from 'lucide-react';
 // Import Header and Footer components inside the Home component file
 import Header from './Header/Header'; // Adjust path as needed based on your folder structure
 import Footer from './Footer/Footer'; // Adjust path as needed based on your folder structure
+import mainPhoto from '../../public/assets/mainvilla.jpg';
 
 const customFontStyle = {
   fontFamily: "'Neue Montreal Regular', sans-serif",
@@ -23,7 +24,7 @@ function Home() {
           {/* Background Image */}
           <div className="absolute inset-0">
             <img
-              src="./src/assets/MainLuxuryVilla.jpg"
+              src={mainPhoto}
               alt="Modern Luxury Home at Dusk"
               className="w-full h-full object-cover object-center"
             />
