@@ -19,7 +19,7 @@ import {
 } from "lucide-react";
 
 // Import background image
-import backgroundImage from "../../assets/twentyfour.jpeg";
+import backgroundImage from "../../../public/assets/twentyfour.jpeg";
 
 // Custom font styles
 const customFontStyle = {

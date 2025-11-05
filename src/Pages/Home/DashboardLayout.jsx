@@ -27,6 +27,7 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from '@/components/ui/collapsible';
+import logo from '../../../public/assets/logo.png';
 
 import { FaHome, FaUsers, FaUserCircle, FaSignOutAlt, FaTachometerAlt, FaUserShield } from 'react-icons/fa';
 import { GiFamilyTree, GiNetworkBars, GiRank3 } from 'react-icons/gi';
@@ -114,7 +115,7 @@ function AppSidebar() {
       <SidebarHeader>
         <div className="flex items-center gap-2 px-2 py-2">
           <div className="w-20 h-20 rounded-full flex items-center justify-center">
-            <img src="/src/assets/logo.png" alt="Logo" className="w-20 h-20 rounded-full object-cover" />
+            <img src={logo} alt="Logo" className="w-20 h-20 rounded-full object-cover" />
           </div>
           <div className="flex flex-col group-data-[collapsible=icon]:hidden">
             <h1 className="font-bold text-sm text-gray-800">Shree Jee</h1>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import logo from '../../../public/assets/logo.png'
 import {
   FaHome,
   FaUserFriends,
@@ -70,7 +71,7 @@ function Header() {
           className="flex items-center gap-3 text-white hover:opacity-90 transition"
         >
           <img
-            src="/src/assets/logo.png"
+            src={logo}
             alt="Shree Jee Real Estate"
             className="w-16 h-14 rounded-full  shadow-md"
           />
