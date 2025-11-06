@@ -71,7 +71,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Skeleton } from '@/components/ui/skeleton';
 import { toast } from 'sonner';
 
-const API_BASE_URL = 'https://shreejeebackend.onrender.com/api/v1/admin';
+const API_BASE_URL = 'http://localhost:5000/api/v1/admin';
 
 // Create axios instance with interceptors
 const apiClient = axios.create({
@@ -98,7 +98,7 @@ apiClient.interceptors.response.use(
       originalRequest._retry = true;
       try {
         const refreshToken = localStorage.getItem('refreshToken');
-        const response = await axios.post('https://shreejeebackend.onrender.com/api/v1/users/refresh-token', {
+        const response = await axios.post('http://localhost:5000/api/v1/users/refresh-token', {
           refreshToken,
         });
         const { accessToken, refreshToken: newRefreshToken } = response.data.data;

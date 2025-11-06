@@ -1,9 +1,7 @@
-// Updated components/Plots.jsx
 import React, { useEffect, useState } from "react";
 import { useAuth } from "@/context/AuthContext";
 import axios from "axios";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Select,
@@ -22,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const Plots = () => {
   const { user, loading: authLoading } = useAuth();
@@ -35,21 +33,18 @@ const Plots = () => {
   const [cities, setCities] = useState([]);
   const [selectedPlot, setSelectedPlot] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  // Initialize tokenAmount to 0
   const [tokenAmount, setTokenAmount] = useState(0);
   const [bookingResponse, setBookingResponse] = useState(null);
 
-  // Axios instance with auth
   const apiClient = axios.create({
     baseURL: API_BASE_URL,
     headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` },
   });
 
-  // Fetch all plots (for dropdowns)
   const fetchAllPlots = async () => {
     try {
-      const { data } = await apiClient.get("/user/plots/available", { 
-        params: { limit: 1000 } 
+      const { data } = await apiClient.get("/user/plots/available", {
+        params: { limit: 1000 },
       });
       const plots = data.data.plots || [];
       setAllPlots(plots);
@@ -62,7 +57,6 @@ const Plots = () => {
     }
   };
 
-  // Fetch filtered plots
   const fetchPlots = async () => {
     if (!filters.city) return;
     setLoading(true);
@@ -83,12 +77,10 @@ const Plots = () => {
     }
   };
 
-  // Load cities once user is authenticated
   useEffect(() => {
     if (!authLoading && user) fetchAllPlots();
   }, [authLoading, user]);
 
-  // When a city is selected, filter sites belonging to that city
   useEffect(() => {
     if (filters.city) {
       const filteredSites = [
@@ -104,20 +96,17 @@ const Plots = () => {
     }
   }, [filters.city, allPlots]);
 
-  // Removed the useEffect that auto-set tokenAmount to 10% of the price
-
   const handleSearch = () => fetchPlots();
 
   const getStatusColor = (status) => {
     if (status === "booked") return "bg-red-500 text-white";
-    if (status === "pending") return "bg-yellow-500 text-black";
+    if (status === "pending") return "bg-yellow-400 text-black";
     if (status === "available") return "bg-green-500 text-white";
     return "bg-gray-300 text-black";
   };
 
   const handlePlotClick = (plot) => {
     setSelectedPlot(plot);
-    // Explicitly set tokenAmount to 0 when a plot is clicked
     setTokenAmount(0);
     setBookingResponse(null);
     setShowModal(true);
@@ -127,9 +116,8 @@ const Plots = () => {
     if (!selectedPlot) return;
     setBookingLoading(true);
     setBookingResponse(null);
-    
+
     try {
-      // Endpoint call with potentially 0 tokenAmount
       const response = await apiClient.post("/user/plots/book", {
         plotId: selectedPlot._id,
         tokenAmount,
@@ -137,13 +125,10 @@ const Plots = () => {
 
       if (response.data.success) {
         setBookingResponse(response.data.data);
-        
-        // Update local state to pending
+
         setPlots((prev) =>
-          prev.map((p) => 
-            p._id === selectedPlot._id 
-              ? { ...p, status: "pending" } 
-              : p
+          prev.map((p) =>
+            p._id === selectedPlot._id ? { ...p, status: "pending" } : p
           )
         );
         setSelectedPlot({ ...selectedPlot, status: "pending" });
@@ -157,7 +142,6 @@ const Plots = () => {
     }
   };
 
-  // Loader & Auth guard
   if (authLoading)
     return (
       <div className="flex justify-center py-20">
@@ -173,21 +157,20 @@ const Plots = () => {
     );
 
   return (
-    <div className="p-6">
-      {/* 🔍 Filters */}
+    <div className="p-4 sm:p-6">
+      {/* Filters */}
       <Card className="mb-6 shadow-md border border-gray-200">
         <CardHeader>
           <CardTitle className="text-lg font-semibold">Search Plots</CardTitle>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4">
-          {/* 🏙 City Dropdown */}
+        <CardContent className="flex flex-col sm:flex-row flex-wrap gap-4">
           <Select
             value={filters.city}
             onValueChange={(value) =>
               setFilters({ city: value, siteName: "", facing: "" })
             }
           >
-            <SelectTrigger className="w-52">
+            <SelectTrigger className="w-full sm:w-52">
               <SelectValue placeholder="Select City" />
             </SelectTrigger>
             <SelectContent>
@@ -203,7 +186,6 @@ const Plots = () => {
             </SelectContent>
           </Select>
 
-          {/* 🏗 Site Dropdown */}
           <Select
             value={filters.siteName}
             onValueChange={(value) =>
@@ -211,7 +193,7 @@ const Plots = () => {
             }
             disabled={!filters.city}
           >
-            <SelectTrigger className="w-52">
+            <SelectTrigger className="w-full sm:w-52">
               <SelectValue placeholder="Select Site" />
             </SelectTrigger>
             <SelectContent>
@@ -229,34 +211,47 @@ const Plots = () => {
             </SelectContent>
           </Select>
 
-          {/* 🧭 Facing Dropdown */}
           <Select
             value={filters.facing}
             onValueChange={(value) => setFilters({ ...filters, facing: value })}
             disabled={!filters.city}
           >
-            <SelectTrigger className="w-52">
+            <SelectTrigger className="w-full sm:w-52">
               <SelectValue placeholder="Facing" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="north">North</SelectItem>
-              <SelectItem value="south">South</SelectItem>
-              <SelectItem value="east">East</SelectItem>
-              <SelectItem value="west">West</SelectItem>
-              <SelectItem value="north-east">North-East</SelectItem>
-              <SelectItem value="north-west">North-West</SelectItem>
-              <SelectItem value="south-east">South-East</SelectItem>
-              <SelectItem value="south-west">South-West</SelectItem>
+              {[
+                "north",
+                "south",
+                "east",
+                "west",
+                "north-east",
+                "north-west",
+                "south-east",
+                "south-west",
+              ].map((dir) => (
+                <SelectItem key={dir} value={dir}>
+                  {dir.replace("-", " ").toUpperCase()}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
 
-          <Button onClick={handleSearch} disabled={!filters.city || loading}>
-            {loading ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : "Search"}
+          <Button
+            onClick={handleSearch}
+            disabled={!filters.city || loading}
+            className="w-full sm:w-auto"
+          >
+            {loading ? (
+              <Loader2 className="h-4 w-4 animate-spin mr-1" />
+            ) : (
+              "Search"
+            )}
           </Button>
         </CardContent>
       </Card>
 
-      {/* 🧱 Plot Grid */}
+      {/* Plot Grid */}
       {!filters.city ? (
         <p className="text-center text-gray-500 mt-10">
           Please select a city to view plots.
@@ -268,27 +263,19 @@ const Plots = () => {
       ) : plots.length === 0 ? (
         <p className="text-center text-gray-500 mt-10">No plots found.</p>
       ) : (
-        <div className="grid grid-cols-10 gap-3">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-10 gap-3">
           {plots.map((plot) => (
             <div
               key={plot._id}
               onClick={() => handlePlotClick(plot)}
-              className={`p-3 rounded-lg cursor-pointer flex flex-col items-center justify-center text-center transition-all duration-200 hover:opacity-90 ${getStatusColor(
+              className={`relative p-3 rounded-lg cursor-pointer flex flex-col items-center justify-center text-center transition-all duration-200 hover:opacity-90 ${getStatusColor(
                 plot.status
               )}`}
             >
-              {/* Plot Number */}
               <div className="font-bold text-sm">{plot.plotNumber}</div>
-
-              {/* Full Site Name */}
-              <div
-                className="text-[12px] mt-1 text-white font-medium leading-tight break-words text-center px-1"
-                style={{ wordBreak: "break-word", whiteSpace: "normal" }}
-              >
+              <div className="text-[11px] mt-1 text-white font-medium leading-tight break-words text-center px-1">
                 {plot.siteLocation?.siteName || "N/A"}
               </div>
-              
-              {/* Pending indicator */}
               {plot.status === "pending" && (
                 <div className="absolute top-1 right-1">
                   <Clock className="h-3 w-3 text-black" />
@@ -299,11 +286,11 @@ const Plots = () => {
         </div>
       )}
 
-      {/* 📄 Plot Details Modal */}
+      {/* Modal */}
       <Dialog open={showModal} onOpenChange={setShowModal}>
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-[95vw] sm:max-w-3xl max-h-[90vh] overflow-y-auto">
           <DialogHeader className="flex flex-row items-start justify-between">
-            <DialogTitle className="text-2xl font-bold">
+            <DialogTitle className="text-xl sm:text-2xl font-bold">
               {selectedPlot?.plotName} - {selectedPlot?.plotNumber}
             </DialogTitle>
             <Button
@@ -317,14 +304,14 @@ const Plots = () => {
           </DialogHeader>
 
           {selectedPlot && (
-            <div className="space-y-4">
-              {/* Success Message */}
+            <div className="space-y-4 text-sm sm:text-base">
               {bookingResponse && (
                 <Alert className="bg-blue-50 border-blue-200">
                   <Info className="h-4 w-4 text-blue-600" />
                   <AlertDescription className="text-blue-800">
                     <div className="font-semibold mb-1">
-                      Booking request submitted for {bookingResponse.bookingType.replace('_', ' ')}!
+                      Booking request submitted for{" "}
+                      {bookingResponse.bookingType.replace("_", " ")}!
                     </div>
                     <div className="text-sm">
                       Your booking is pending admin approval.
@@ -333,7 +320,8 @@ const Plots = () => {
                 </Alert>
               )}
 
-              <div className="grid grid-cols-2 gap-4">
+              {/* Plot Info */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold">Location</h3>
                   <p>{selectedPlot.siteLocation.siteName}</p>
@@ -355,7 +343,7 @@ const Plots = () => {
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold">Pricing</h3>
                   <p>
@@ -382,43 +370,35 @@ const Plots = () => {
               {selectedPlot.status === "available" && !bookingResponse && (
                 <div className="border-t pt-4">
                   <h3 className="font-semibold mb-2">Book Plot</h3>
-                  
-                  {/* Info Alert about automatic team detection */}
                   <Alert className="mb-4 bg-blue-50 border-blue-200">
                     <Info className="h-4 w-4 text-blue-600" />
                     <AlertDescription className="text-blue-800 text-sm">
-                      The system will automatically detect your team position and book accordingly.
-                      Booking requires admin approval. Token amount can be 0.
+                      System auto-detects your team. Booking needs admin approval.
+                      Token amount can be 0.
                     </AlertDescription>
                   </Alert>
-
-                  <div className="space-y-4">
-              
-
-                    <Button
-                      onClick={handleBookPlot}
-                      disabled={bookingLoading}
-                      className="w-full"
-                    >
-                      {bookingLoading ? (
-                        <>
-                          <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                          Booking...
-                        </>
-                      ) : (
-                        "Request Booking"
-                      )}
-                    </Button>
-                  </div>
+                  <Button
+                    onClick={handleBookPlot}
+                    disabled={bookingLoading}
+                    className="w-full"
+                  >
+                    {bookingLoading ? (
+                      <>
+                        <Loader2 className="h-4 w-4 animate-spin mr-2" />
+                        Booking...
+                      </>
+                    ) : (
+                      "Request Booking"
+                    )}
+                  </Button>
                 </div>
               )}
 
-              {/* Pending Status */}
               {selectedPlot.status === "pending" && (
                 <Alert className="bg-yellow-50 border-yellow-200">
                   <Clock className="h-4 w-4 text-yellow-600" />
                   <AlertDescription className="text-yellow-800">
-                    This booking is pending admin approval. You will be notified once approved.
+                    This booking is pending admin approval.
                   </AlertDescription>
                 </Alert>
               )}

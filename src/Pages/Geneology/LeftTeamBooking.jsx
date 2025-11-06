@@ -34,7 +34,7 @@ import { FaUserFriends } from "react-icons/fa";
 import { MdRealEstateAgent } from "react-icons/md";
 import { BsFillCreditCard2BackFill } from "react-icons/bs";
 
-const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const LeftTeamBookings = () => {
   const { user, loading: authLoading } = useAuth();
