@@ -1,3 +1,4 @@
+// src/Pages/Header/Header.jsx
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
@@ -16,7 +17,7 @@ import {
   FaClipboardList,
   FaWarehouse,
 } from "react-icons/fa";
-import { motion, AnimatePresence } from "framer-motion";
+import {  motion, AnimatePresence } from "framer-motion";
 
 
 const customFontStyle = {
@@ -24,6 +25,7 @@ const customFontStyle = {
   fontWeight: 600,
   fontStyle: "normal",
 };
+
 
 
 function Header() {

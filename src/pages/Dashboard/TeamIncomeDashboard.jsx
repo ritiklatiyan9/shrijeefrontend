@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { useAuth } from "../../context/AuthContext";
 import { fetchTeamMatchingIncome } from "../../api/matchingIncomeService";
+import { fetchUserLegBalanceSummary } from "../../api/legBalanceService";
 import {
   Card,
   CardContent,
@@ -40,11 +41,9 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
-  Loader2,
   Users,
   DollarSign,
   TrendingUp,
-  Calendar,
   Eye,
   AlertCircle,
   Info,
@@ -52,12 +51,16 @@ import {
   ArrowLeftRight,
   Filter,
   X,
+  ArrowLeft,
+  ArrowRight,
+  Clock,
 } from "lucide-react";
 
 const MyTeamIncomeDashboard = () => {
   const { user } = useAuth();
   const [records, setRecords] = useState([]);
   const [summary, setSummary] = useState(null);
+  const [legBalance, setLegBalance] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [selectedRecord, setSelectedRecord] = useState(null);
@@ -78,6 +81,7 @@ const MyTeamIncomeDashboard = () => {
     setLoading(true);
     setError(null);
     try {
+      // Fetch team income records
       const result = await fetchTeamMatchingIncome(user._id, {
         ...filters,
         page: 1,
@@ -90,6 +94,12 @@ const MyTeamIncomeDashboard = () => {
         setError(result.message || "Failed to fetch team data");
         setRecords([]);
         setSummary({});
+      }
+
+      // Fetch leg balance summary
+      const legBalanceResult = await fetchUserLegBalanceSummary(user._id);
+      if (legBalanceResult.success) {
+        setLegBalance(legBalanceResult.data);
       }
     } catch (err) {
       setError(err.message);
@@ -167,6 +177,10 @@ const MyTeamIncomeDashboard = () => {
     return <LoadingSkeleton />;
   }
 
+  const leftLeg = legBalance?.leftLeg || {};
+  const rightLeg = legBalance?.rightLeg || {};
+  const carryForward = legBalance?.carryForward || {};
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-indigo-50 to-slate-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -227,6 +241,141 @@ const MyTeamIncomeDashboard = () => {
             gradient="from-amber-500 to-orange-600"
           />
         </div>
+
+        {/* Leg Balance & Carry-Forward Section */}
+        {legBalance && (
+          <Card className="border-l-4 border-l-amber-500 shadow-lg">
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="text-2xl flex items-center gap-2">
+                    <ArrowLeftRight className="w-6 h-6" />
+                    My Leg Balance & Carry-Forward
+                  </CardTitle>
+                  <CardDescription>
+                    Your personal left and right leg sales balance with carry-forward tracking
+                  </CardDescription>
+                </div>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => window.location.href = "/leg-balance"}
+                >
+                  View Details
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Visual Balance Bar */}
+              <div className="space-y-2">
+                <div className="flex items-center justify-between text-sm font-medium">
+                  <span className="flex items-center gap-2">
+                    <ArrowLeft className="w-4 h-4 text-blue-600" />
+                    Left: {formatCurrency(leftLeg.availableBalance || 0)}
+                  </span>
+                  <span className="flex items-center gap-2">
+                    Right: {formatCurrency(rightLeg.availableBalance || 0)}
+                    <ArrowRight className="w-4 h-4 text-green-600" />
+                  </span>
+                </div>
+                <div className="h-8 flex rounded-lg overflow-hidden border-2 border-gray-200">
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{
+                      width: `${
+                        (leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0) > 0
+                          ? ((leftLeg.availableBalance || 0) /
+                              ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                            100
+                          : 50
+                      }%`,
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-blue-500 flex items-center justify-center text-white font-semibold text-xs"
+                  >
+                    {((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0) > 0) &&
+                      (((leftLeg.availableBalance || 0) /
+                        ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                        100 >
+                      15) &&
+                      `${(
+                        ((leftLeg.availableBalance || 0) /
+                          ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                        100
+                      ).toFixed(0)}%`}
+                  </motion.div>
+                  <motion.div
+                    initial={{ width: 0 }}
+                    animate={{
+                      width: `${
+                        (leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0) > 0
+                          ? ((rightLeg.availableBalance || 0) /
+                              ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                            100
+                          : 50
+                      }%`,
+                    }}
+                    transition={{ duration: 0.5 }}
+                    className="bg-green-500 flex items-center justify-center text-white font-semibold text-xs"
+                  >
+                    {((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0) > 0) &&
+                      (((rightLeg.availableBalance || 0) /
+                        ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                        100 >
+                      15) &&
+                      `${(
+                        ((rightLeg.availableBalance || 0) /
+                          ((leftLeg.availableBalance || 0) + (rightLeg.availableBalance || 0))) *
+                        100
+                      ).toFixed(0)}%`}
+                  </motion.div>
+                </div>
+              </div>
+
+              {/* Stats Grid */}
+              <div className="grid grid-cols-4 gap-4">
+                <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                  <p className="text-xs text-blue-700 font-medium mb-1">Left Leg Total</p>
+                  <p className="text-lg font-bold text-blue-700">
+                    {formatCurrency(leftLeg.totalSales || 0)}
+                  </p>
+                  <p className="text-xs text-blue-600 mt-1">
+                    Available: {formatCurrency(leftLeg.availableBalance || 0)}
+                  </p>
+                </div>
+                <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                  <p className="text-xs text-green-700 font-medium mb-1">Right Leg Total</p>
+                  <p className="text-lg font-bold text-green-700">
+                    {formatCurrency(rightLeg.totalSales || 0)}
+                  </p>
+                  <p className="text-xs text-green-600 mt-1">
+                    Available: {formatCurrency(rightLeg.availableBalance || 0)}
+                  </p>
+                </div>
+                <div className="bg-amber-50 p-4 rounded-lg border border-amber-200">
+                  <p className="text-xs text-amber-700 font-medium mb-1">⏳ Carry-Forward</p>
+                  <p className="text-lg font-bold text-amber-700">
+                    {formatCurrency(carryForward.amount || 0)}
+                  </p>
+                  {carryForward.amount > 0 && (
+                    <Badge variant="outline" className="text-xs mt-1 border-amber-400 text-amber-700">
+                      {carryForward.leg === "left" ? "⬅️ Left" : "➡️ Right"}
+                    </Badge>
+                  )}
+                </div>
+                <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-200">
+                  <p className="text-xs text-indigo-700 font-medium mb-1">✅ Total Matched</p>
+                  <p className="text-lg font-bold text-indigo-700">
+                    {formatCurrency(legBalance.totalMatchedAmount || 0)}
+                  </p>
+                  <p className="text-xs text-indigo-600 mt-1">
+                    {legBalance.matchingCount || 0} matchings
+                  </p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        )}
 
         {/* My Income from Team */}
         <div className="grid sm:grid-cols-2 gap-6">
@@ -533,7 +682,7 @@ const MyTeamIncomeDashboard = () => {
         <Alert className="bg-blue-50 border-blue-200">
           <Info className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-blue-900">
-            <strong className="font-semibold">💡 How Team Income Works:</strong>
+            <strong className="font-semibold">💡 Team Income & Carry-Forward System:</strong>
             <ul className="mt-2 space-y-1 list-disc list-inside text-sm">
               <li>
                 <strong>Team Income:</strong> Earnings generated by all your
@@ -548,8 +697,10 @@ const MyTeamIncomeDashboard = () => {
                 leg sales
               </li>
               <li>
-                <strong>Your Income from Team Match:</strong> Calculated when
-                your team's left and right sales balance
+                <strong>Carry-Forward:</strong> Unmatched balances are automatically tracked and used in future matchings
+              </li>
+              <li>
+                <strong>Example:</strong> If Left = ₹2L and Right = ₹1.5L, you earn 5% of ₹1.5L, and ₹50K carries forward
               </li>
               <li>
                 <strong>3-Month Approval Lock:</strong> Income can be approved
@@ -840,7 +991,7 @@ const BreakdownRow = ({ label, value, color }) => (
   </div>
 );
 
-// Record Detail Modal
+// Record Detail Modal (same as before)
 const RecordDetailModal = ({
   record,
   isOpen,
@@ -1169,6 +1320,7 @@ const LoadingSkeleton = () => (
           <Skeleton key={i} className="h-40" />
         ))}
       </div>
+      <Skeleton className="h-48" />
       <div className="grid sm:grid-cols-2 gap-6">
         <Skeleton className="h-64" />
         <Skeleton className="h-64" />
