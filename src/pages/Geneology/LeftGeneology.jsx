@@ -40,7 +40,7 @@ const GeneologyLeft = () => {
     const fetchLeftGenealogy = async () => {
       try {
         setLoading(true);
-        const response = await fetch('http://localhost:5000/api/v1/users/left-genealogy', {
+        const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/left-genealogy', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
