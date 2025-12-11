@@ -85,7 +85,7 @@ const AdminMatchingIncomeApproval = () => {
   const [filters, setFilters] = useState({
     status: "",
     incomeType: "",
-    eligibleOnly: true,
+    eligibleOnly: false,
     search: "",
   });
 
@@ -356,7 +356,7 @@ const AdminMatchingIncomeApproval = () => {
             />
             <StatCard
               title="Approved This Month"
-              value={stats.currentMonth?.approved || 0}
+              value={stats.currentMonth?.count || 0}
               subtitle={formatCurrency(stats.currentMonth?.totalIncome || 0)}
               icon={<CheckCircle2 className="w-8 h-8" />}
               gradient="from-green-500 to-emerald-600"
@@ -378,87 +378,7 @@ const AdminMatchingIncomeApproval = () => {
           </div>
         )}
 
-        {/* Filters */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Filter className="w-5 h-5" />
-              Filters
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="space-y-2">
-                <Label>Status</Label>
-                <Select
-                  value={filters.status}
-                  onValueChange={(value) =>
-                    setFilters((prev) => ({ ...prev, status: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Statuses" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="pending">Pending</SelectItem>
-                    <SelectItem value="eligible">Eligible</SelectItem>
-                    <SelectItem value="approved">Approved</SelectItem>
-                    <SelectItem value="credited">Credited</SelectItem>
-                    <SelectItem value="paid">Paid</SelectItem>
-                    <SelectItem value="rejected">Rejected</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Income Type</Label>
-                <Select
-                  value={filters.incomeType}
-                  onValueChange={(value) =>
-                    setFilters((prev) => ({ ...prev, incomeType: value }))
-                  }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All Types" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="personal_sale">Personal Sale</SelectItem>
-                    <SelectItem value="matching_bonus">Matching Bonus</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
-
-              <div className="space-y-2">
-                <Label>Search</Label>
-                <Input
-                  placeholder="Plot number or user..."
-                  value={filters.search}
-                  onChange={(e) =>
-                    setFilters((prev) => ({ ...prev, search: e.target.value }))
-                  }
-                />
-              </div>
-
-              <div className="flex items-end">
-                <div className="flex items-center space-x-2">
-                  <Checkbox
-                    id="eligibleOnly"
-                    checked={filters.eligibleOnly}
-                    onCheckedChange={(checked) =>
-                      setFilters((prev) => ({ ...prev, eligibleOnly: checked }))
-                    }
-                  />
-                  <Label
-                    htmlFor="eligibleOnly"
-                    className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-                  >
-                    Eligible Only
-                  </Label>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+    
 
         {/* Bulk Actions */}
         {selectedRecords.size > 0 && (
@@ -563,9 +483,7 @@ const AdminMatchingIncomeApproval = () => {
         <Alert className="bg-blue-50 border-blue-200">
           <AlertCircle className="h-4 w-4 text-blue-600" />
           <AlertDescription className="text-blue-900">
-            <strong>3-Month Approval Lock:</strong> Income records can only be
-            approved 3 months after the sale date. Records automatically become
-            "eligible" when the lock period expires.
+            <strong>Immediate Approval:</strong> Income records are immediately eligible for approval upon sale. No waiting period required.
           </AlertDescription>
         </Alert>
       </div>
