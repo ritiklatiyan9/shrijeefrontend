@@ -21,7 +21,7 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 
-const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const RightTeamBookings = () => {
   const { user, loading: authLoading } = useAuth();

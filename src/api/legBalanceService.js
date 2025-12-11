@@ -1,7 +1,7 @@
 // api/legBalanceService.js - Leg Balance & Carry-Forward API Service
 import axios from 'axios';
 
-const API_BASE_URL ='https://shreejeebackend.onrender.com';
+const API_BASE_URL ='http://localhost:5000';
 
 // Create axios instance with default config
 const api = axios.create({

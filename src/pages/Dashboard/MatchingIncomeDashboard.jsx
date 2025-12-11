@@ -530,7 +530,7 @@ const MyIncomeDashboard = () => {
                 <strong>Example:</strong> If Left = ₹2L and Right = ₹1.5L, you earn 5% of ₹1.5L, and ₹50K carries forward
               </li>
               <li>
-                <strong>3-Month Approval Lock:</strong> Income becomes eligible for admin approval only after 3 months from sale date
+                <strong>Immediate Eligibility:</strong> Income is immediately eligible for admin approval upon sale
               </li>
               <li>
                 <strong>Status Flow:</strong> Pending → Eligible → Approved → Credited → Paid

@@ -9,16 +9,16 @@ import ReactFlow, {
   addEdge,
   BackgroundVariant,
   Position,
-  Handle, // IMPORTANT: Import Handle
+  Handle,
 } from 'reactflow';
 import 'reactflow/dist/style.css';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw, Users, Mail, Phone, Calendar, User as UserIcon } from 'lucide-react'; // Added UserIcon
+import { RefreshCw, Users, Mail, Phone } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 
-// Node component for the flow - defined outside to prevent re-renders
+// Node component for the flow
 const UserNode = ({ data }) => {
   const { user, isRoot } = data;
 
@@ -39,13 +39,11 @@ const UserNode = ({ data }) => {
       .slice(0, 2);
   };
 
-  // Determine image source
   const userImage = user.personalInfo?.profileImage;
   const usePlaceholder = !userImage;
 
   return (
     <div className="relative">
-      {/* TOP HANDLE - for incoming connections */}
       <Handle
         type="target"
         position={Position.Top}
@@ -58,27 +56,25 @@ const UserNode = ({ data }) => {
         }}
       />
 
-      <Card className={`w-80 ${isRoot ? 'border-2 border-blue-500 shadow-lg bg-blue-50' : 'border shadow-md bg-white'}`}>
-        <CardHeader className="pb-3">
-          <div className="flex items-center gap-3">
-            {/* Conditional rendering for image or placeholder */}
+      <Card className={`w-72 ${isRoot ? 'border-2 border-blue-500 shadow-lg bg-blue-50' : 'border shadow-md bg-white'}`}>
+        <CardHeader className="pb-2 pt-3 px-3">
+          <div className="flex items-center gap-2">
             {usePlaceholder ? (
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-lg">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
                 {getInitials()}
               </div>
             ) : (
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-gray-300">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300">
                 <img
                   src={userImage}
                   alt={`${getUserName()}'s profile`}
                   className="w-full h-full object-cover"
                   onError={(e) => {
-                    // Fallback to initials if image fails to load
-                    e.target.onerror = null; // Prevents infinite loop if fallback also fails
+                    e.target.onerror = null;
                     e.target.style.display = 'none';
                     const parent = e.target.parentElement;
                     const initialsDiv = document.createElement('div');
-                    initialsDiv.className = 'w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg';
+                    initialsDiv.className = 'w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-sm';
                     initialsDiv.textContent = getInitials();
                     parent.appendChild(initialsDiv);
                   }}
@@ -86,22 +82,22 @@ const UserNode = ({ data }) => {
               </div>
             )}
             <div className="flex-1 min-w-0">
-              <CardTitle className="text-lg font-semibold truncate">
+              <CardTitle className="text-base font-semibold truncate">
                 {getUserName()}
               </CardTitle>
-              <p className="text-sm text-gray-500 truncate">@{user.username || user.email?.split('@')[0]}</p>
+              <p className="text-xs text-gray-500 truncate">@{user.username || user.email?.split('@')[0]}</p>
             </div>
           </div>
         </CardHeader>
-        <CardContent className="space-y-3">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 text-sm">
-              <Mail className="h-4 w-4 text-gray-400" />
+        <CardContent className="space-y-2 px-3 pb-3">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-xs">
+              <Mail className="h-3 w-3 text-gray-400" />
               <span className="text-gray-600 truncate">{user.email}</span>
             </div>
             {user.personalInfo?.phone && (
-              <div className="flex items-center gap-2 text-sm">
-                <Phone className="h-4 w-4 text-gray-400" />
+              <div className="flex items-center gap-2 text-xs">
+                <Phone className="h-3 w-3 text-gray-400" />
                 <span className="text-gray-600">{user.personalInfo.phone}</span>
               </div>
             )}
@@ -110,7 +106,7 @@ const UserNode = ({ data }) => {
           <div className="flex justify-between items-center pt-2 border-t">
             <div>
               <span className="text-xs text-gray-500">Rank</span>
-              <Badge variant="secondary" className="ml-1 text-xs">
+              <Badge variant="secondary" className="ml-1 text-xs py-0">
                 {user.rank?.current || 'Bronze'}
               </Badge>
             </div>
@@ -118,7 +114,7 @@ const UserNode = ({ data }) => {
               <span className="text-xs text-gray-500">Status</span>
               <Badge 
                 variant={user.status === 'active' ? 'default' : 'secondary'} 
-                className="ml-1 text-xs"
+                className="ml-1 text-xs py-0"
               >
                 {user.status || 'pending'}
               </Badge>
@@ -126,14 +122,13 @@ const UserNode = ({ data }) => {
           </div>
 
           <div className="text-center pt-1 border-t">
-            <span className="text-xs text-gray-500 font-mono bg-gray-100 px-2 py-1 rounded">
+            <span className="text-xs text-gray-500 font-mono bg-gray-100 px-2 py-0.5 rounded">
               {user.memberId}
             </span>
           </div>
         </CardContent>
       </Card>
 
-      {/* BOTTOM HANDLE - for outgoing connections */}
       <Handle
         type="source"
         position={Position.Bottom}
@@ -149,9 +144,23 @@ const UserNode = ({ data }) => {
   );
 };
 
-// Define nodeTypes outside the component to prevent recreation
 const nodeTypes = {
   userNode: UserNode,
+};
+
+// Calculate the width needed for a subtree (count of leaf nodes, minimum 1)
+const getSubtreeWidth = (node) => {
+  if (!node || !node._id) return 0;
+  if (!node.children || node.children.length === 0) return 1;
+  
+  let width = 0;
+  node.children.forEach(child => {
+    if (child && child._id) {
+      width += getSubtreeWidth(child);
+    }
+  });
+  
+  return Math.max(width, 1);
 };
 
 const BinaryTreeComponent = () => {
@@ -167,7 +176,7 @@ const BinaryTreeComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/binary-tree', {
+      const response = await fetch('http://localhost:5000/api/v1/users/binary-tree', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json',
@@ -188,88 +197,81 @@ const BinaryTreeComponent = () => {
     }
   }, []);
 
-  // Build nodes and edges
-  const buildNodesAndEdges = (tree, parentId = null, level = 0, index = 0) => {
-    const calculateNodePosition = (level, index) => {
-      const baseXSpacing = 350;
-      const baseYSpacing = 250;
-      
-      const nodesAtLevel = Math.pow(2, level);
-      const levelWidth = nodesAtLevel * baseXSpacing;
-      const x = (index * baseXSpacing) - (levelWidth / 2) + (baseXSpacing / 2);
-      const y = level * baseYSpacing;
-
-      return { x, y };
-    };
-
+  // Intelligent spacing based on actual subtree sizes
+  const buildNodesAndEdges = useCallback((tree) => {
     if (!tree || !tree._id) {
-      if (!parentId) {
-        console.error("Root tree node is invalid or missing _id:", tree);
-        setError("Invalid root node data received from server.");
-        return { nodes: [], edges: [] };
-      }
+      console.error("Root tree node is invalid or missing _id:", tree);
+      setError("Invalid root node data received from server.");
       return { nodes: [], edges: [] };
     }
 
-    const nodeId = tree._id;
-    const isRoot = !parentId;
-    const nodePosition = calculateNodePosition(level, index);
-
-    const node = {
-      id: nodeId,
-      type: 'userNode',
-      position: nodePosition,
-      data: { 
-        user: tree, 
-        isRoot 
-      },
-      width: 320,
-      height: 200,
-    };
-
-    let allNodes = [node];
-    let allEdges = [];
-
-    if (parentId) {
-      const edge = {
-        id: `edge-${parentId}-${nodeId}`,
-        source: parentId,
-        target: nodeId,
-        type: 'smoothstep',
-        style: { 
-          stroke: '#3b82f6',
-          strokeWidth: 2,
-        },
-        markerEnd: {
-          type: 'arrowclosed',
-          color: '#3b82f6',
-        },
-        sourceHandle: 'bottom',
-        targetHandle: 'top',
-      };
-      if (edge.source && edge.target) {
-        allEdges.push(edge);
-      }
-    }
-
-    if (tree.children && Array.isArray(tree.children)) {
-      tree.children.forEach((child, childIndex) => {
-        if (child && child._id) {
-          const childIndexInLevel = (index * 2) + childIndex;
-          const { nodes: childNodes, edges: childEdges } = buildNodesAndEdges(
-            child, 
-            nodeId,
-            level + 1, 
-            childIndexInLevel
-          );
-          allNodes = [...allNodes, ...childNodes];
-          allEdges = [...allEdges, ...childEdges];
-        }
+    const allNodes = [];
+    const allEdges = [];
+    
+    // Configuration - compact but readable
+    const NODE_WIDTH = 290;       // Actual node width (w-72 = 288px)
+    const NODE_HEIGHT = 170;      // Approximate node height
+    const H_GAP = 30;             // Horizontal gap between adjacent nodes
+    const V_GAP = 60;             // Vertical gap between levels
+    
+    const UNIT_WIDTH = NODE_WIDTH + H_GAP;
+    
+    // Process node with intelligent positioning
+    const processNode = (node, level, leftBoundary, parentId = null) => {
+      if (!node || !node._id) return leftBoundary;
+      
+      const nodeId = node._id;
+      const isRoot = !parentId;
+      const subtreeWidth = getSubtreeWidth(node);
+      
+      // Calculate x position - center of this node's allocated space
+      const allocatedWidth = subtreeWidth * UNIT_WIDTH;
+      const centerX = leftBoundary + (allocatedWidth / 2) - (NODE_WIDTH / 2);
+      const y = level * (NODE_HEIGHT + V_GAP);
+      
+      // Create the node
+      allNodes.push({
+        id: nodeId,
+        type: 'userNode',
+        position: { x: centerX, y },
+        data: { user: node, isRoot },
       });
-    }
-
+      
+      // Create edge from parent
+      if (parentId) {
+        allEdges.push({
+          id: `edge-${parentId}-${nodeId}`,
+          source: parentId,
+          target: nodeId,
+          type: 'smoothstep',
+          style: { stroke: '#3b82f6', strokeWidth: 2 },
+          markerEnd: { type: 'arrowclosed', color: '#3b82f6' },
+          sourceHandle: 'bottom',
+          targetHandle: 'top',
+        });
+      }
+      
+      // Process children - allocate space proportionally based on their subtree sizes
+      if (node.children && Array.isArray(node.children)) {
+        let childLeftBoundary = leftBoundary;
+        
+        node.children.forEach((child) => {
+          if (child && child._id) {
+            const childWidth = getSubtreeWidth(child);
+            processNode(child, level + 1, childLeftBoundary, nodeId);
+            childLeftBoundary += childWidth * UNIT_WIDTH;
+          }
+        });
+      }
+      
+      return leftBoundary + allocatedWidth;
+    };
+    
+    // Start processing from root
+    processNode(tree, 0, 0, null);
+    
     return { nodes: allNodes, edges: allEdges };
-  };
+  }, []);
 
   const loadTree = useCallback(async () => {
     const data = await fetchBinaryTree();
@@ -295,7 +297,7 @@ const BinaryTreeComponent = () => {
       setNodes(treeNodes);
       setEdges(treeEdges);
     }
-  }, [treeData, setNodes, setEdges]);
+  }, [treeData, setNodes, setEdges, buildNodesAndEdges]);
 
   useEffect(() => {
     loadTree();
@@ -345,19 +347,13 @@ const BinaryTreeComponent = () => {
         onConnect={onConnect}
         nodeTypes={memoizedNodeTypes}
         fitView
-        fitViewOptions={{ padding: 0.3 }}
-        minZoom={0.2}
-        maxZoom={1.5}
+        fitViewOptions={{ padding: 0.1 }}
+        minZoom={0.1}
+        maxZoom={2}
         defaultEdgeOptions={{
           type: 'smoothstep',
-          style: { 
-            stroke: '#3b82f6',
-            strokeWidth: 2,
-          },
-          markerEnd: {
-            type: 'arrowclosed',
-            color: '#3b82f6',
-          },
+          style: { stroke: '#3b82f6', strokeWidth: 2 },
+          markerEnd: { type: 'arrowclosed', color: '#3b82f6' },
         }}
       >
         <Controls />

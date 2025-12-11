@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 
-const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
+const API_BASE_URL = "http://localhost:5000/api/v1/plots";
 
 const Plots = () => {
   const { user, loading: authLoading } = useAuth();

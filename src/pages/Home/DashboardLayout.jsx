@@ -65,7 +65,7 @@ function AppSidebar() {
 
   // 🧬 Genealogy Section
   const geneologySubItems = [
-    { name: 'Company Genealogy ', path: '/dashboard/geneology-tree', icon: <GiFamilyTree className="text-green-600" /> },
+     { name: 'My Geneology Tree', path: '/dashboard/my-users', icon: <FaTachometerAlt className="text-blue-500" /> },
     { name: 'Genealogy Left', path: '/dashboard/geneology-left', icon: <GiNetworkBars className="text-orange-500" /> },
     { name: 'Genealogy Right', path: '/dashboard/geneology-right', icon: <GiRank3 className="text-purple-600" /> },
     { name: 'All Members', path: '/dashboard/geneology-all', icon: <FaUsers className="text-teal-500" /> },
@@ -77,7 +77,7 @@ function AppSidebar() {
     { name: 'My Profile', path: '/dashboard/profile', icon: <FaUserCircle className="text-indigo-500" /> },
     { name: 'KYC', path: '/dashboard/kyc', icon: <MdVerifiedUser className="text-emerald-600" /> },
     { name: 'Welcome Letter', path: '/dashboard/welcome-letter', icon: <LetterText className="text-red-500" /> },
-    { name: 'My Geneology Tree', path: '/dashboard/my-users', icon: <FaTachometerAlt className="text-blue-500" /> },
+  
   ];
   const isProfileSectionActive = profileSubItems.some(item => location.pathname === item.path);
 
@@ -106,6 +106,7 @@ function AppSidebar() {
   const incomeSubItems = [
     { name: 'My Income', path: '/dashboard/matching-income', icon: <GiRank3 className="text-yellow-600" /> },
     { name: 'Team Income', path: '/dashboard/team-income', icon: <GiRank3 className="text-green-600" /> },
+    { name: 'Rewards', path: '/dashboard/rewards', icon: <GiRank3 className="text-purple-600" /> },
   ];
   const isIncomeSectionActive = incomeSubItems.some(item => location.pathname === item.path);
 

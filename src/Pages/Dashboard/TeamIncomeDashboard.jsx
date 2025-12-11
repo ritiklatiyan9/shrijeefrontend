@@ -703,8 +703,7 @@ const MyTeamIncomeDashboard = () => {
                 <strong>Example:</strong> If Left = ₹2L and Right = ₹1.5L, you earn 5% of ₹1.5L, and ₹50K carries forward
               </li>
               <li>
-                <strong>3-Month Approval Lock:</strong> Income can be approved
-                only after 3 months from sale date
+                <strong>Immediate Approval:</strong> Income is immediately eligible for approval upon sale
               </li>
             </ul>
           </AlertDescription>

@@ -38,6 +38,7 @@ import AdminBookings from './Pages/Dashboard/AdminBookings';
 import MatchingIncomeDashboard from './Pages/Dashboard/MatchingIncomeDashboard';
 import AdminApproveIncome from './Pages/Dashboard/AdminApproveIncome';
 import TeamIncomeDashboard from './Pages/Dashboard/TeamIncomeDashboard';
+import Rewards from './Pages/Dashboard/Rewards';
 
 import './fonts.css';
 // Protected Route Component
@@ -182,6 +183,7 @@ function App() {
               <Route path="matching-income" element={<MatchingIncomeDashboard />} />
               <Route path="admin-approve-income" element={<AdminApproveIncome />} />
               <Route path="team-income" element={<TeamIncomeDashboard />} />
+              <Route path="rewards" element={<Rewards />} />
              
             </Route>
 
