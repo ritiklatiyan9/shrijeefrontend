@@ -148,7 +148,7 @@ const CompanyTreeComponent = () => {
       setLoading(true);
       setError(null);
       
-      const response = await fetch('http://localhost:5000/api/v1/users/company-tree', {
+      const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/company-tree', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
           'Content-Type': 'application/json',
