@@ -2,23 +2,36 @@ import { Building2, Users, Award, ShieldCheck } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { ContainerScroll } from "@/components/ui/container-scroll-animation";
+import Testimonials from "@/components/ui/testimonials-demo";
 
 export default function AboutUsPage() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-stone-50 to-stone-100 py-12 px-4 sm:px-6">
       <div className="max-w-6xl mx-auto space-y-16">
         {/* Hero Section */}
-        <section className="text-center space-y-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-stone-900">
-            About Shreejee Real Estate
-          </h1>
-          <p className="text-xl text-stone-600 max-w-3xl mx-auto">
-            Your Gateway to Property Success in Dehradun
-          </p>
-          <p className="text-lg text-stone-500 max-w-3xl mx-auto">
-            Empowering individuals through our innovative MLM plan to build wealth and achieve financial freedom in the thriving Dehradun real estate market.
-          </p>
-        </section>
+        <ContainerScroll
+          titleComponent={
+            <>
+              <h1 className="text-4xl md:text-5xl font-bold text-stone-900">
+                About Shreejee Real Estate
+              </h1>
+              <p className="text-xl text-stone-600 max-w-3xl mx-auto">
+                Your Gateway to Property Success in Dehradun
+              </p>
+              <p className="text-lg text-stone-500 max-w-3xl mx-auto">
+                Empowering individuals through our innovative MLM plan to build wealth and achieve financial freedom in the thriving Dehradun real estate market.
+              </p>
+            </>
+          }
+        >
+          <img
+            src="https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?ixlib=rb-4.0.3&auto=format&fit=crop&w=1400&q=80"
+            alt="Dehradun Cityscape"
+            className="mx-auto rounded-2xl object-cover h-full object-left-top"
+            draggable={false}
+          />
+        </ContainerScroll>
 
         {/* Vision & Mission */}
         <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -143,6 +156,8 @@ export default function AboutUsPage() {
             </Button>
           </div>
         </section>
+
+        <Testimonials.Testimonials />
       </div>
     </div>
   );
