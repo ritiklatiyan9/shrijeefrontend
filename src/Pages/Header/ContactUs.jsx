@@ -29,7 +29,7 @@ const customFontStyle = {
 };
 
 const customFontStyle2 = {
-  fontFamily: "'Travel October', sans-serif",
+  fontFamily: "'Neue Montreal Regular', sans-serif",
   fontWeight: 600,
   fontStyle: "normal",
 };
@@ -37,7 +37,7 @@ const customFontStyle2 = {
 export default function ContactUs() {
   const handleSubmit = (e) => {
     e.preventDefault();
-    
+
     // Get form data
     const firstName = e.target[0].value;
     const lastName = e.target[1].value;
@@ -75,7 +75,7 @@ export default function ContactUs() {
       btn.classList.remove('bg-blue-100', 'text-blue-700');
       btn.classList.add('border', 'border-gray-200');
     });
-    
+
     // Add active class to clicked button
     e.target.classList.add('bg-blue-100', 'text-blue-700');
     e.target.classList.remove('border');
@@ -97,17 +97,17 @@ export default function ContactUs() {
 
       {/* Content Container */}
       <div className="relative z-10 container mx-auto px-4 pt-[104px] pb-12 flex flex-col md:flex-row gap-8">
-        
+
         {/* Left Side: Headline + Info */}
         <div className="flex-1 text-white space-y-6">
-          <h1 
+          <h1
             className="text-4xl md:text-5xl font-bold leading-tight"
             style={customFontStyle2} // Applied Travel October font
           >
             Contact <br />
             Shree Jee Real Estate
           </h1>
-          <p 
+          <p
             className="text-lg max-w-xl opacity-90"
             style={customFontStyle} // Applied Neue Montreal Regular font
           >
@@ -118,13 +118,13 @@ export default function ContactUs() {
           <div className="grid md:grid-cols-2 gap-8 mt-12 text-sm">
             {/* Location */}
             <div>
-              <h3 
+              <h3
                 className="font-semibold mb-2"
                 style={customFontStyle2} // Applied Travel October font
               >
                 Location
               </h3>
-              <p 
+              <p
                 className="opacity-80"
                 style={customFontStyle} // Applied Neue Montreal Regular font
               >
@@ -136,13 +136,13 @@ export default function ContactUs() {
 
             {/* Social Media */}
             <div>
-              <h3 
+              <h3
                 className="font-semibold mb-2"
                 style={customFontStyle2} // Applied Travel October font
               >
                 Social Media
               </h3>
-              <div 
+              <div
                 className="space-y-1 opacity-80"
                 style={customFontStyle} // Applied Neue Montreal Regular font
               >
@@ -154,13 +154,13 @@ export default function ContactUs() {
 
             {/* Email */}
             <div>
-              <h3 
+              <h3
                 className="font-semibold mb-2"
                 style={customFontStyle2} // Applied Travel October font
               >
                 Email
               </h3>
-              <p 
+              <p
                 className="opacity-80"
                 style={customFontStyle} // Applied Neue Montreal Regular font
               >
@@ -170,18 +170,18 @@ export default function ContactUs() {
 
             {/* Contact */}
             <div>
-              <h3 
+              <h3
                 className="font-semibold mb-2"
                 style={customFontStyle2} // Applied Travel October font
               >
                 Contact
               </h3>
-              <p 
+              <p
                 className="opacity-80"
                 style={customFontStyle} // Applied Neue Montreal Regular font
               >
                 +91 97603 02690
-              </p> 
+              </p>
             </div>
           </div>
         </div>
@@ -190,13 +190,13 @@ export default function ContactUs() {
         <div className="md:w-[420px]">
           <Card className="bg-white shadow-xl rounded-2xl p-6">
             <CardHeader className="pb-4">
-              <CardTitle 
+              <CardTitle
                 className="text-xl font-bold"
                 style={customFontStyle2} // Applied Travel October font
               >
                 Get In Touch
               </CardTitle>
-              <p 
+              <p
                 className="text-sm text-muted-foreground"
                 style={customFontStyle} // Applied Neue Montreal Regular font
               >
@@ -208,15 +208,15 @@ export default function ContactUs() {
               <form className="space-y-4" onSubmit={handleSubmit}>
                 {/* Name Fields */}
                 <div className="grid grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="First Name" 
-                    className="rounded-full" 
+                  <Input
+                    placeholder="First Name"
+                    className="rounded-full"
                     style={customFontStyle} // Applied Neue Montreal Regular font
                     required
                   />
-                  <Input 
-                    placeholder="Last Name" 
-                    className="rounded-full" 
+                  <Input
+                    placeholder="Last Name"
+                    className="rounded-full"
                     style={customFontStyle} // Applied Neue Montreal Regular font
                     required
                   />
@@ -224,24 +224,24 @@ export default function ContactUs() {
 
                 {/* Country & Phone */}
                 <div className="grid grid-cols-2 gap-4">
-                  <Input 
-                    placeholder="Country" 
-                    className="rounded-full" 
+                  <Input
+                    placeholder="Country"
+                    className="rounded-full"
                     style={customFontStyle} // Applied Neue Montreal Regular font
                     required
                   />
-                  <Input 
-                    placeholder="Phone Number" 
-                    className="rounded-full" 
+                  <Input
+                    placeholder="Phone Number"
+                    className="rounded-full"
                     style={customFontStyle} // Applied Neue Montreal Regular font
                     required
                   />
                 </div>
 
                 {/* Email */}
-                <Input 
-                  placeholder="Email Address" 
-                  className="rounded-full" 
+                <Input
+                  placeholder="Email Address"
+                  className="rounded-full"
                   style={customFontStyle} // Applied Neue Montreal Regular font
                   type="email"
                   required
@@ -249,7 +249,7 @@ export default function ContactUs() {
 
                 {/* Inquiry Type Buttons */}
                 <div>
-                  <Label 
+                  <Label
                     className="block text-sm font-medium mb-2"
                     style={customFontStyle2} // Applied Travel October font
                   >
@@ -284,8 +284,8 @@ export default function ContactUs() {
                 {/* Newsletter Checkbox */}
                 <div className="flex items-center gap-2">
                   <input type="checkbox" id="newsletter" className="w-4 h-4" />
-                  <label 
-                    htmlFor="newsletter" 
+                  <label
+                    htmlFor="newsletter"
                     className="text-sm text-muted-foreground"
                     style={customFontStyle} // Applied Neue Montreal Regular font
                   >

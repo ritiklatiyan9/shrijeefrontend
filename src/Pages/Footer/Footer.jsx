@@ -18,7 +18,7 @@ import {
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 import { Facebook, Twitter, Instagram, Linkedin, Mail, Phone, MapPin } from 'lucide-react';
-import logo from '../../../public/assets/logo.png'
+const logo = "/assets/logo.png";
 
 const customFontStyle = {
   fontFamily: "'Neue Montreal Regular', sans-serif",
@@ -29,9 +29,9 @@ const customFontStyle = {
 function Footer() {
   return (
     <footer
-      style={customFontStyle} // Apply custom font style
       className="relative pt-12 pb-8 px-4 text-white overflow-hidden"
       style={{
+        ...customFontStyle,
         // The background gradient definition starts here
         background: `
           radial-gradient(circle at 15% 30%, rgba(130, 100, 255, 0.4) 0%, transparent 30%),
