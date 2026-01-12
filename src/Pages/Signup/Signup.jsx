@@ -8,16 +8,17 @@ import {
   Home,
   Building,
   IndianRupee,
-  Camera,
   Eye,
   EyeOff,
+  ArrowRight,
+  CheckCircle2,
 } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
+import { motion } from "framer-motion";
 
 const customFontStyle = {
   fontFamily: "'Neue Montreal Regular', sans-serif",
-  fontWeight: 600,
   fontStyle: "normal",
 };
 
@@ -69,16 +70,12 @@ function SignUp() {
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.sponsorId)
-      newErrors.sponsorId = "Sponsor ID is required";
-    if (!formData.email)
-      newErrors.email = "Email is required";
+    if (!formData.sponsorId) newErrors.sponsorId = "Sponsor ID is required";
+    if (!formData.email) newErrors.email = "Email is required";
     else if (!/\S+@\S+\.\S+/.test(formData.email))
       newErrors.email = "Invalid email";
-    if (!formData.username)
-      newErrors.username = "Username is required";
-    if (!formData.password)
-      newErrors.password = "Password is required";
+    if (!formData.username) newErrors.username = "Username is required";
+    if (!formData.password) newErrors.password = "Password is required";
     else if (formData.password.length < 6)
       newErrors.password = "Minimum 6 characters";
     if (formData.password !== formData.confirmPassword)
@@ -128,289 +125,327 @@ function SignUp() {
   return (
     <div
       style={customFontStyle}
-      className="h-full flex flex-col md:flex-row bg-gray-100"
+      className="min-h-screen w-full bg-gradient-to-br from-indigo-50 via-white to-purple-50 flex justify-center py-10 px-4 md:px-6"
     >
-      {/* Left Section (Form) */}
-      <div className="flex flex-col justify-start items-center md:w-1/2 w-full bg-gray-50 rounded-tr-[60px] rounded-br-[60px] shadow-xl p-10 md:px-16 py-8 relative overflow-y-auto">
-        {/* Decorative blob */}
-        <div className="absolute -top-20 -left-20 w-60 h-60 bg-indigo-100 rounded-full blur-3xl opacity-70"></div>
+      {/* Decorative Background Elements */}
+      <div className="fixed top-0 left-0 -ml-20 -mt-20 w-96 h-96 bg-blue-200/30 rounded-full blur-3xl opacity-50 pointer-events-none" />
+      <div className="fixed bottom-0 right-0 -mr-20 -mb-20 w-80 h-80 bg-purple-200/30 rounded-full blur-3xl opacity-50 pointer-events-none" />
 
-        <div className="relative z-10 text-left w-full mb-6">
-          <h1 className="text-3xl md:text-4xl font-extrabold text-gray-900 leading-tight">
-            Join{" "}
-            <span className="text-indigo-600">Shree Jee Real Estate</span>
-          </h1>
-          <p className="text-gray-500 mt-2 text-sm">
-            Create your account to get started
-          </p>
-        </div>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-6xl bg-white/70 backdrop-blur-2xl rounded-[2.5rem] shadow-2xl border border-white/50 overflow-hidden flex flex-col md:flex-row relative z-10"
+      >
+        {/* Left Section (Form) */}
+        <div className="w-full md:w-3/5 p-8 md:p-12 lg:p-16 h-full">
+          <div className="space-y-2 mb-8">
+            <h1 className="text-3xl md:text-4xl font-bold text-slate-900 tracking-tight">
+              Join <span className="text-indigo-600">Shree Jee real estate</span>
+            </h1>
+            <p className="text-slate-500 font-medium">
+              Start your journey to financial freedom today.
+            </p>
+          </div>
 
-        <form
-          onSubmit={handleSubmit}
-          className="relative z-10 w-full max-w-lg bg-white border border-gray-200 rounded-2xl shadow-lg p-6 md:p-8 space-y-5"
-        >
-          {/* Sponsor ID */}
-          <div>
-            <label className="block text-sm font-semibold text-gray-700 mb-1">
-              Sponsor ID <span className="text-red-500">*</span>
-            </label>
-            <div className="relative">
-              <User className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
-              <input
-                name="sponsorId"
-                type="text"
-                value={formData.sponsorId}
+          <form onSubmit={handleSubmit} className="space-y-8">
+            {/* Section 1: Account Info */}
+            <div className="space-y-5">
+              <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-100 pb-2">
+                Account Details
+              </h3>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Sponsor ID <span className="text-red-500">*</span></label>
+                  <InputField
+                    icon={User}
+                    name="sponsorId"
+                    placeholder="Enter Sponsor ID"
+                    value={formData.sponsorId}
+                    onChange={handleChange}
+                    error={errors.sponsorId}
+                    className="bg-white/50"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Username</label>
+                    <InputField
+                      icon={User}
+                      name="username"
+                      placeholder="Choose a username"
+                      value={formData.username}
+                      onChange={handleChange}
+                      error={errors.username}
+                      className="bg-white/50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Email</label>
+                    <InputField
+                      icon={Mail}
+                      name="email"
+                      type="email"
+                      placeholder="you@company.com"
+                      value={formData.email}
+                      onChange={handleChange}
+                      error={errors.email}
+                      className="bg-white/50"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Password</label>
+                    <PasswordField
+                      name="password"
+                      value={formData.password}
+                      onChange={handleChange}
+                      showPassword={showPassword}
+                      toggle={() => setShowPassword(!showPassword)}
+                      error={errors.password}
+                      className="bg-white/50"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-slate-700 mb-1.5 ml-1">Confirm Password</label>
+                    <InputField
+                      icon={Lock}
+                      type="password"
+                      name="confirmPassword"
+                      placeholder="••••••"
+                      value={formData.confirmPassword}
+                      onChange={handleChange}
+                      error={errors.confirmPassword}
+                      className="bg-white/50"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Section 2: Personal Info */}
+            <div className="space-y-5">
+              <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-100 pb-2">
+                Personal Information
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <InputField
+                  icon={User}
+                  name="firstName"
+                  placeholder="First Name"
+                  value={formData.personalInfo.firstName}
+                  onChange={handleChange}
+                  error={errors.firstName}
+                />
+                <InputField
+                  icon={User}
+                  name="lastName"
+                  placeholder="Last Name"
+                  value={formData.personalInfo.lastName}
+                  onChange={handleChange}
+                  error={errors.lastName}
+                />
+                <InputField
+                  icon={Phone}
+                  name="phone"
+                  placeholder="Phone Number"
+                  value={formData.personalInfo.phone}
+                  onChange={handleChange}
+                  error={errors.phone}
+                />
+                <InputField
+                  icon={Calendar}
+                  name="dateOfBirth"
+                  type="date"
+                  value={formData.personalInfo.dateOfBirth}
+                  onChange={handleChange}
+                  error={errors.dateOfBirth}
+                />
+              </div>
+              <InputField
+                icon={Home}
+                name="address"
+                placeholder="Full Address"
+                value={formData.personalInfo.address}
                 onChange={handleChange}
-                placeholder="Enter your Sponsor ID"
-                className={`w-full pl-10 pr-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-                  errors.sponsorId ? "border-red-500" : "border-gray-300"
-                }`}
+                error={errors.address}
               />
             </div>
-            {errors.sponsorId && (
-              <p className="text-sm text-red-600 mt-1">{errors.sponsorId}</p>
-            )}
-          </div>
 
-          {/* Username & Email */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField
-              icon={User}
-              name="username"
-              label="Username"
-              placeholder="john123"
-              value={formData.username}
-              onChange={handleChange}
-              error={errors.username}
-            />
-            <InputField
-              icon={Mail}
-              name="email"
-              type="email"
-              label="Email"
-              placeholder="you@example.com"
-              value={formData.email}
-              onChange={handleChange}
-              error={errors.email}
-            />
-          </div>
-
-          {/* Password */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <PasswordField
-              label="Password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              showPassword={showPassword}
-              toggle={() => setShowPassword(!showPassword)}
-              error={errors.password}
-            />
-            <InputField
-              icon={Lock}
-              type="password"
-              name="confirmPassword"
-              label="Confirm Password"
-              value={formData.confirmPassword}
-              onChange={handleChange}
-              placeholder="••••••"
-              error={errors.confirmPassword}
-            />
-          </div>
-
-          {/* Personal Info */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <InputField
-              icon={User}
-              name="firstName"
-              label="First Name"
-              placeholder="John"
-              value={formData.personalInfo.firstName}
-              onChange={handleChange}
-              error={errors.firstName}
-            />
-            <InputField
-              icon={User}
-              name="lastName"
-              label="Last Name"
-              placeholder="Doe"
-              value={formData.personalInfo.lastName}
-              onChange={handleChange}
-              error={errors.lastName}
-            />
-            <InputField
-              icon={Phone}
-              name="phone"
-              label="Phone"
-              placeholder="9876543210"
-              value={formData.personalInfo.phone}
-              onChange={handleChange}
-              error={errors.phone}
-            />
-            <InputField
-              icon={Calendar}
-              name="dateOfBirth"
-              type="date"
-              label="Date of Birth"
-              value={formData.personalInfo.dateOfBirth}
-              onChange={handleChange}
-              error={errors.dateOfBirth}
-            />
-            <InputField
-              icon={Home}
-              name="address"
-              label="Address"
-              placeholder="New Delhi, India"
-              value={formData.personalInfo.address}
-              onChange={handleChange}
-              error={errors.address}
-            />
-          </div>
-
-          {/* Bank Info */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <InputField
-              icon={IndianRupee}
-              name="accountNumber"
-              label="Account No."
-              placeholder="1234567890"
-              value={formData.bankDetails.accountNumber}
-              onChange={handleChange}
-              error={errors.accountNumber}
-            />
-            <InputField
-              icon={Building}
-              name="ifscCode"
-              label="IFSC Code"
-              placeholder="SBIN0001111"
-              value={formData.bankDetails.ifscCode}
-              onChange={handleChange}
-              error={errors.ifscCode}
-            />
-            <InputField
-              icon={User}
-              name="accountHolderName"
-              label="Account Holder"
-              placeholder="John Doe"
-              value={formData.bankDetails.accountHolderName}
-              onChange={handleChange}
-              error={errors.accountHolderName}
-            />
-          </div>
-
-          {/* Error Message */}
-          {errors.general && (
-            <div className="text-sm bg-red-50 text-red-700 p-2.5 rounded-md border border-red-200">
-              {errors.general}
+            {/* Section 3: Bank Details */}
+            <div className="space-y-5">
+              <h3 className="text-sm font-bold text-indigo-500 uppercase tracking-widest border-b border-indigo-100 pb-2">
+                Bank Details
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <InputField
+                  icon={IndianRupee}
+                  name="accountNumber"
+                  placeholder="Account No."
+                  value={formData.bankDetails.accountNumber}
+                  onChange={handleChange}
+                  error={errors.accountNumber}
+                />
+                <InputField
+                  icon={Building}
+                  name="ifscCode"
+                  placeholder="IFSC Code"
+                  value={formData.bankDetails.ifscCode}
+                  onChange={handleChange}
+                  error={errors.ifscCode}
+                />
+                <InputField
+                  icon={User}
+                  name="accountHolderName"
+                  placeholder="Holder Name"
+                  value={formData.bankDetails.accountHolderName}
+                  onChange={handleChange}
+                  error={errors.accountHolderName}
+                />
+              </div>
             </div>
-          )}
 
-          {/* Submit */}
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2.5 rounded-lg shadow-md transition transform hover:scale-[1.02]"
-          >
-            CREATE ACCOUNT
-          </button>
-        </form>
+            {/* Error Message */}
+            {errors.general && (
+              <motion.div
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="p-4 rounded-xl bg-red-50 border border-red-100 text-red-600 text-sm font-medium flex items-center gap-2"
+              >
+                <div className="w-1.5 h-1.5 rounded-full bg-red-500" />
+                {errors.general}
+              </motion.div>
+            )}
 
-        {/* Footer */}
-        <p className="mt-6 mb-4 text-center text-sm text-gray-600">
-          Already have an account?{" "}
-          <Link
-            to="/login"
-            className="text-indigo-600 hover:text-indigo-500 font-semibold"
-          >
-            Sign in
-          </Link>
-        </p>
-      </div>
-
-      {/* Right Illustration */}
-      <div className="hidden md:flex w-1/2 bg-gradient-to-br from-indigo-950 to-zinc-950 items-center justify-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-black/20 backdrop-blur-[1px]"></div>
-        <div className="relative z-10 text-center px-8">
-          <h2 className="text-white text-4xl font-bold mb-3">
-            Build Your Real Estate Network
-          </h2>
-          <p className="text-indigo-100 text-sm max-w-md mx-auto">
-            Register and start managing your team, bookings, and earnings
-            effortlessly.
-          </p>
+            <div className="pt-4">
+              <button
+                type="submit"
+                className="w-full group bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-4 rounded-xl shadow-lg shadow-indigo-200 transition-all duration-300 transform hover:scale-[1.01] hover:shadow-indigo-300 flex items-center justify-center gap-2"
+              >
+                Create Account
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </button>
+              <div className="mt-6 text-center">
+                <p className="text-slate-500">
+                  Already a partner?{" "}
+                  <Link to="/login" className="text-indigo-600 font-bold hover:text-indigo-700 hover:underline decoration-2 underline-offset-4">
+                    Log in here
+                  </Link>
+                </p>
+              </div>
+            </div>
+          </form>
         </div>
-      </div>
+
+        {/* Right Section (Visuals) */}
+        <div className="hidden md:flex w-2/5 bg-slate-900 relative items-center justify-center p-12 overflow-hidden">
+          <div className="absolute inset-0 bg-gradient-to-br from-indigo-600/20 to-purple-600/20 z-10" />
+
+          {/* Background Image with Overlay */}
+          <div className="absolute inset-0">
+            <img
+              src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80"
+              alt="Modern Building"
+              className="w-full h-full object-cover opacity-30 grayscale mix-blend-overlay"
+            />
+            <div className="absolute inset-0 bg-slate-900/60" />
+          </div>
+
+          <div className="relative z-20 text-white max-w-sm space-y-8">
+            <div>
+              <h2 className="text-4xl font-bold mb-4 leading-tight">Welcome to the future of <span className="text-indigo-400">Real Estate</span></h2>
+              <p className="text-slate-300 text-lg leading-relaxed">Join thousands of successful partners who are reshaping the skylines of Dehradun.</p>
+            </div>
+
+            <div className="space-y-4">
+              {[
+                "Smart Income Tracking",
+                "Transparent Growth",
+                "Premium Support",
+                "Secure Transactions"
+              ].map((item, i) => (
+                <motion.div
+                  key={i}
+                  initial={{ opacity: 0, x: 20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.4 + (i * 0.1) }}
+                  className="flex items-center gap-3"
+                >
+                  <div className="p-1 rounded-full bg-indigo-500/20 text-indigo-300">
+                    <CheckCircle2 className="w-4 h-4" />
+                  </div>
+                  <span className="font-medium text-slate-200">{item}</span>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          {/* Animated shapes */}
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+            className="absolute -bottom-40 -left-40 w-80 h-80 border border-white/10 rounded-full"
+          />
+          <motion.div
+            animate={{ rotate: -360 }}
+            transition={{ duration: 60, repeat: Infinity, ease: "linear" }}
+            className="absolute -top-40 -right-40 w-[30rem] h-[30rem] border border-white/5 rounded-full"
+          />
+        </div>
+      </motion.div>
     </div>
   );
 }
 
-// Reusable input field
-const InputField = ({
-  label,
-  name,
-  type = "text",
-  icon: Icon,
-  value,
-  onChange,
-  placeholder,
-  error,
-}) => (
-  <div>
-    <label className="block text-sm font-semibold text-gray-700 mb-1">
-      {label}
-    </label>
+// Reusable components
+const InputField = ({ icon: Icon, error, className = "", ...props }) => (
+  <div className="relative group">
     <div className="relative">
-      {Icon && <Icon className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />}
+      {Icon && (
+        <div className="absolute left-3.5 top-3.5 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+          <Icon className="w-5 h-5" />
+        </div>
+      )}
       <input
-        id={name}
-        name={name}
-        type={type}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        className={`w-full pl-10 pr-3 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-          error ? "border-red-500" : "border-gray-300"
-        }`}
+        {...props}
+        className={`w-full ${Icon ? "pl-11" : "pl-4"} pr-4 py-3 bg-slate-50 border ${error ? "border-red-300 focus:border-red-500 focus:ring-red-200" : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-200"
+          } rounded-xl outline-none focus:ring-4 transition-all duration-200 text-slate-700 placeholder:text-slate-400 font-medium ${className}`}
       />
     </div>
-    {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+    {error && (
+      <span className="absolute -bottom-5 left-1 text-xs text-red-500 font-medium">{error}</span>
+    )}
   </div>
 );
 
-const PasswordField = ({
-  label,
-  name,
-  value,
-  onChange,
-  showPassword,
-  toggle,
-  error,
-}) => (
-  <div>
-    <label className="block text-sm font-semibold text-gray-700 mb-1">
-      {label}
-    </label>
+const PasswordField = ({ showPassword, toggle, error, className = "", ...props }) => (
+  <div className="relative group">
     <div className="relative">
-      <Lock className="absolute left-3 top-3.5 w-5 h-5 text-gray-400" />
+      <div className="absolute left-3.5 top-3.5 text-slate-400 group-focus-within:text-indigo-500 transition-colors">
+        <Lock className="w-5 h-5" />
+      </div>
       <input
-        id={name}
-        name={name}
         type={showPassword ? "text" : "password"}
-        value={value}
-        onChange={onChange}
         placeholder="••••••"
-        className={`w-full pl-10 pr-10 py-2.5 border rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 ${
-          error ? "border-red-500" : "border-gray-300"
-        }`}
+        {...props}
+        className={`w-full pl-11 pr-12 py-3 bg-slate-50 border ${error ? "border-red-300 focus:border-red-500 focus:ring-red-200" : "border-slate-200 focus:border-indigo-500 focus:ring-indigo-200"
+          } rounded-xl outline-none focus:ring-4 transition-all duration-200 text-slate-700 placeholder:text-slate-400 font-medium ${className}`}
       />
       <button
         type="button"
-        className="absolute right-3 top-3 text-gray-400 hover:text-gray-600"
         onClick={toggle}
+        className="absolute right-3.5 top-3.5 text-slate-400 hover:text-indigo-600 transition-colors"
       >
         {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
       </button>
     </div>
-    {error && <p className="text-sm text-red-600 mt-1">{error}</p>}
+    {error && (
+      <span className="absolute -bottom-5 left-1 text-xs text-red-500 font-medium">{error}</span>
+    )}
   </div>
 );
 

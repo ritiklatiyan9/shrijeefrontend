@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import logo from '../../../public/assets/logo.png'
+const logo = "/assets/logo.png";
 import {
   FaHome,
   FaUserFriends,
@@ -17,7 +17,7 @@ import {
   FaClipboardList,
   FaWarehouse,
 } from "react-icons/fa";
-import {  motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 
 
 const customFontStyle = {
@@ -93,18 +93,16 @@ function Header() {
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
-                  className={`flex items-center gap-1 text-white px-4 py-2 rounded-full hover:bg-white/20 transition ${
-                    location.pathname.startsWith("/property")
-                      ? "bg-white/25"
-                      : ""
-                  }`}
+                  className={`flex items-center gap-1 text-white px-4 py-2 rounded-full hover:bg-white/20 transition ${location.pathname.startsWith("/property")
+                    ? "bg-white/25"
+                    : ""
+                    }`}
                 >
                   {link.icon}
                   <span>{link.name}</span>
                   <FaChevronDown
-                    className={`ml-1 transition-transform ${
-                      isDropdownOpen ? "rotate-180" : ""
-                    }`}
+                    className={`ml-1 transition-transform ${isDropdownOpen ? "rotate-180" : ""
+                      }`}
                   />
                 </button>
 
@@ -122,11 +120,10 @@ function Header() {
                           key={i}
                           to={sublink.path}
                           onClick={() => setIsDropdownOpen(false)}
-                          className={`block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100 ${
-                            location.pathname === sublink.path
-                              ? "bg-purple-50 font-semibold"
-                              : ""
-                          }`}
+                          className={`block px-4 py-2 text-sm text-gray-700 hover:bg-purple-100 ${location.pathname === sublink.path
+                            ? "bg-purple-50 font-semibold"
+                            : ""
+                            }`}
                         >
                           {sublink.name}
                         </Link>
@@ -139,9 +136,8 @@ function Header() {
               <Link
                 key={index}
                 to={link.path}
-                className={`flex items-center gap-2 text-white px-4 py-2 rounded-full hover:bg-white/20 transition ${
-                  location.pathname === link.path ? "bg-white/25" : ""
-                }`}
+                className={`flex items-center gap-2 text-white px-4 py-2 rounded-full hover:bg-white/20 transition ${location.pathname === link.path ? "bg-white/25" : ""
+                  }`}
               >
                 {link.icon}
                 <span>{link.name}</span>
@@ -211,9 +207,8 @@ function Header() {
                           <span>{link.name}</span>
                         </div>
                         <FaChevronDown
-                          className={`transition-transform ${
-                            isDropdownOpen ? "rotate-180" : ""
-                          }`}
+                          className={`transition-transform ${isDropdownOpen ? "rotate-180" : ""
+                            }`}
                         />
                       </button>
                       {isDropdownOpen && (
@@ -235,11 +230,10 @@ function Header() {
                     <Link
                       key={index}
                       to={link.path}
-                      className={`flex items-center gap-2 w-full text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-100 transition ${
-                        location.pathname === link.path
-                          ? "bg-purple-100 text-purple-700"
-                          : ""
-                      }`}
+                      className={`flex items-center gap-2 w-full text-gray-700 py-2 px-3 rounded-lg hover:bg-gray-100 transition ${location.pathname === link.path
+                        ? "bg-purple-100 text-purple-700"
+                        : ""
+                        }`}
                       onClick={() => setIsMobileMenuOpen(false)}
                     >
                       {link.icon}

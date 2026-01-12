@@ -42,17 +42,37 @@ const items = [
 ];
 
 function Home2() {
+  const [cardDimensions, setCardDimensions] = React.useState({ width: 520, height: 320 });
+
+  React.useEffect(() => {
+    const updateDimensions = () => {
+      if (typeof window !== 'undefined') {
+        const width = Math.min(window.innerWidth * 0.9, 520); // 90% of screen width or max 520px
+        const height = width < 520 ? 300 : 320; // Adjust height slightly for smaller screens
+        setCardDimensions({ width, height });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
   return (
-    <div style={customFontStyle} className="flex flex-col min-h-screen bg-white">
-      <main className="flex-grow py-12 px-6 md:px-16">
-        <CardStack
-          items={items}
-          initialIndex={0}
-          autoAdvance
-          intervalMs={3000}
-          pauseOnHover
-          showDots
-        />
+    <div style={customFontStyle} className="flex flex-col min-h-[60vh] bg-white overflow-hidden">
+      <main className="flex-grow py-12 px-4 md:px-16 flex items-center justify-center">
+        <div className="w-full max-w-4xl mx-auto flex justify-center">
+          <CardStack
+            items={items}
+            initialIndex={0}
+            autoAdvance
+            intervalMs={3000}
+            pauseOnHover
+            showDots
+            cardWidth={cardDimensions.width}
+            cardHeight={cardDimensions.height}
+          />
+        </div>
       </main>
     </div>
   );

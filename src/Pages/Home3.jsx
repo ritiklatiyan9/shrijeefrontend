@@ -27,11 +27,11 @@ const staggerContainer = {
 
 const cardAnimation = {
   initial: { opacity: 0, y: 20, scale: 0.95 },
-  animate: { 
-    opacity: 1, 
-    y: 0, 
+  animate: {
+    opacity: 1,
+    y: 0,
     scale: 1,
-    transition: { 
+    transition: {
       duration: 0.5,
       ease: [0.43, 0.13, 0.23, 0.96]
     }
@@ -44,8 +44,8 @@ const cardAnimation = {
 
 const imageAnimation = {
   initial: { scale: 1.1, filter: "blur(8px)" },
-  animate: { 
-    scale: 1, 
+  animate: {
+    scale: 1,
     filter: "blur(0px)",
     transition: { duration: 0.8 }
   }
@@ -68,35 +68,35 @@ function Home3() {
   };
 
   const agents = [
-    { 
+    {
       id: 1,
-      name: 'Arjun Singh', 
-      role: 'Property manager', 
-      rating: 4.9, 
+      name: 'Arjun Singh',
+      role: 'Property manager',
+      rating: 4.9,
       deals: 127,
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80'
     },
-    { 
+    {
       id: 2,
-      name: 'Mohit Kumar', 
-      role: 'Property manager', 
-      rating: 4.8, 
+      name: 'Mohit Kumar',
+      role: 'Property manager',
+      rating: 4.8,
       deals: 98,
       image: 'https://images.unsplash.com/photo-1556157382-97eda2d62296?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80'
     },
-    { 
+    {
       id: 3,
-      name: 'Anushka Gupta', 
-      role: 'Property manager', 
-      rating: 5.0, 
+      name: 'Anushka Gupta',
+      role: 'Property manager',
+      rating: 5.0,
       deals: 145,
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80'
     },
-    { 
+    {
       id: 4,
-      name: 'Ananya Sharma', 
-      role: 'Property manager', 
-      rating: 4.7, 
+      name: 'Ananya Sharma',
+      role: 'Property manager',
+      rating: 4.7,
       deals: 89,
       image: 'https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&h=400&q=80'
     }
@@ -108,13 +108,13 @@ function Home3() {
       <main className="flex-grow py-12 px-6 md:px-16">
 
         {/* Section 1: Headline & Subtitle - Matching Home2 sizing */}
-        <motion.div 
+        <motion.div
           className="text-center mb-12"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <motion.h1 
+          <motion.h1
             className="text-3xl md:text-4xl font-bold text-gray-900 mb-4"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -122,7 +122,7 @@ function Home3() {
           >
             Start Your Journey With Our Amazing Agents
           </motion.h1>
-          <motion.p 
+          <motion.p
             className="text-lg text-gray-500 max-w-3xl mx-auto"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -133,7 +133,7 @@ function Home3() {
         </motion.div>
 
         {/* Section 2: Agent Cards - Matching Home2 card sizing */}
-        <motion.div 
+        <motion.div
           className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-16"
           variants={staggerContainer}
           initial="initial"
@@ -151,24 +151,24 @@ function Home3() {
               {/* Image with animation */}
               <motion.div className="relative h-66 mb-4 rounded-lg overflow-hidden">
 
-                <motion.img 
-                  src={agent.image} 
-                  alt={agent.name} 
+                <motion.img
+                  src={agent.image}
+                  alt={agent.name}
                   className="w-full h-full object-cover"
                   initial={{ scale: 1.2 }}
                   animate={{ scale: hoveredAgent === agent.id ? 1.1 : 1 }}
                   transition={{ duration: 0.4 }}
                 />
                 {/* Gradient Overlay on hover */}
-                <motion.div 
+                <motion.div
                   className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent"
                   initial={{ opacity: 0 }}
                   animate={{ opacity: hoveredAgent === agent.id ? 1 : 0 }}
                   transition={{ duration: 0.3 }}
                 />
-                
+
                 {/* Rating Badge */}
-                <motion.div 
+                <motion.div
                   className="absolute top-3 right-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1"
                   initial={{ opacity: 0, scale: 0 }}
                   animate={{ opacity: 1, scale: 1 }}
@@ -179,7 +179,7 @@ function Home3() {
                 </motion.div>
 
                 {/* Deals Badge */}
-                <motion.div 
+                <motion.div
                   className="absolute bottom-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1.5 rounded-full flex items-center gap-1"
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: hoveredAgent === agent.id ? 1 : 0, x: 0 }}
@@ -200,7 +200,7 @@ function Home3() {
 
               {/* Action Button */}
               <div className="flex justify-center">
-                <motion.button 
+                <motion.button
                   className="w-8 h-8 bg-white rounded-full flex items-center justify-center hover:bg-gray-800 hover:text-white transition-all duration-300"
                   whileHover={{ scale: 1.1, rotate: 45 }}
                   whileTap={{ scale: 0.95 }}
@@ -213,13 +213,13 @@ function Home3() {
         </motion.div>
 
         {/* Section 3: Join Button with animation */}
-        <motion.div 
+        <motion.div
           className="text-center mb-16"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.5 }}
         >
-          <motion.button 
+          <motion.button
             className="bg-black text-white px-8 py-3 rounded-lg font-semibold hover:bg-gray-800 transition-colors"
             whileHover={{ scale: 1.05, boxShadow: "0 10px 30px rgba(0,0,0,0.2)" }}
             whileTap={{ scale: 0.95 }}
@@ -229,14 +229,14 @@ function Home3() {
         </motion.div>
 
         {/* Section 4: Newsletter Banner - Matching Home2 CTA sizing */}
-        <motion.div 
+        <motion.div
           className="relative rounded-2xl overflow-hidden mb-12 w-4/5 mx-auto"
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.6, delay: 0.3 }}
         >
           {/* Background Image with animation */}
-          <motion.div 
+          <motion.div
             className="relative h-80 md:h-96 overflow-hidden"
             variants={imageAnimation}
             initial="initial"
@@ -251,7 +251,7 @@ function Home3() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/40 via-transparent to-transparent" />
           </motion.div>
 
-         
+
         </motion.div>
 
       </main>
