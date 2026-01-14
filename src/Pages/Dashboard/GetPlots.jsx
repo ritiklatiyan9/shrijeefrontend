@@ -11,7 +11,9 @@ import {
   SelectItem,
 } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, X, Info, Clock } from "lucide-react";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Label } from "@/components/ui/label";
+import { Loader2, X, Info, Clock, CreditCard, Banknote, Calendar, IndianRupee } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -19,6 +21,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Progress } from "@/components/ui/progress";
 
 const API_BASE_URL = "https://shreejeebackend.onrender.com/api/v1/plots";
 
@@ -35,6 +38,11 @@ const Plots = () => {
   const [showModal, setShowModal] = useState(false);
   const [tokenAmount, setTokenAmount] = useState(0);
   const [bookingResponse, setBookingResponse] = useState(null);
+  
+  // New payment type state
+  const [paymentType, setPaymentType] = useState("full");
+  const [selectedPlanName, setSelectedPlanName] = useState("");
+  const [installmentPreview, setInstallmentPreview] = useState(null);
 
   const apiClient = axios.create({
     baseURL: API_BASE_URL,
@@ -109,8 +117,60 @@ const Plots = () => {
     setSelectedPlot(plot);
     setTokenAmount(0);
     setBookingResponse(null);
+    setPaymentType("full");
+    setSelectedPlanName("");
+    setInstallmentPreview(null);
     setShowModal(true);
   };
+
+  // Calculate installment preview
+  const calculateInstallmentPreview = (plot, planName) => {
+    if (!plot || !plot.installmentPlan?.enabled) return null;
+
+    const totalPrice = plot.pricing?.totalPrice || 0;
+    let plan = null;
+
+    if (planName && plot.installmentPlan?.plans?.length > 0) {
+      plan = plot.installmentPlan.plans.find(p => p.planName === planName && p.isActive);
+    }
+
+    if (!plan && plot.installmentPlan?.plans?.length > 0) {
+      plan = plot.installmentPlan.plans.find(p => p.isActive);
+    }
+
+    // Use default settings if no predefined plan
+    const downPaymentPercent = plan?.downPaymentPercent || plot.installmentPlan?.minDownPaymentPercent || 20;
+    const numberOfInstallments = plan?.numberOfInstallments || plot.installmentPlan?.maxInstallments || 12;
+    const interestRate = plan?.interestRate || plot.installmentPlan?.installmentInterestRate || 0;
+
+    const downPaymentAmount = Math.round((totalPrice * downPaymentPercent) / 100);
+    const remainingAmount = totalPrice - downPaymentAmount;
+    const totalWithInterest = Math.round(remainingAmount * (1 + (interestRate / 100)));
+    const emiAmount = plan?.emiAmount || Math.ceil(totalWithInterest / numberOfInstallments);
+    const totalPayable = downPaymentAmount + (emiAmount * numberOfInstallments);
+
+    return {
+      planName: plan?.planName || "Default Plan",
+      downPaymentPercent,
+      downPaymentAmount,
+      numberOfInstallments,
+      interestRate,
+      emiAmount,
+      totalPayable,
+      savings: totalPrice - totalPayable <= 0 ? 0 : totalPrice - totalPayable,
+      extraCost: totalPayable - totalPrice > 0 ? totalPayable - totalPrice : 0
+    };
+  };
+
+  // Update preview when payment type or plan changes
+  useEffect(() => {
+    if (paymentType === "installment" && selectedPlot) {
+      const preview = calculateInstallmentPreview(selectedPlot, selectedPlanName);
+      setInstallmentPreview(preview);
+    } else {
+      setInstallmentPreview(null);
+    }
+  }, [paymentType, selectedPlanName, selectedPlot]);
 
   const handleBookPlot = async () => {
     if (!selectedPlot) return;
@@ -120,7 +180,8 @@ const Plots = () => {
     try {
       const response = await apiClient.post("/user/plots/book", {
         plotId: selectedPlot._id,
-        tokenAmount,
+        paymentType,
+        selectedPlanName: paymentType === "installment" ? (selectedPlanName || installmentPreview?.planName) : null,
       });
 
       if (response.data.success) {
@@ -346,14 +407,24 @@ const Plots = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <h3 className="font-semibold">Pricing</h3>
-                  <p>
-                    Base Price: ₹
-                    {selectedPlot.pricing.basePrice.toLocaleString()}
-                  </p>
-                  <p>
-                    Total Price: ₹
-                    {selectedPlot.pricing.totalPrice.toLocaleString()}
-                  </p>
+                  {selectedPlot.pricing?.showPriceToUser !== false ? (
+                    <>
+                      {selectedPlot.pricing?.showBasePrice !== false && (
+                        <p>
+                          Base Price: ₹
+                          {selectedPlot.pricing.basePrice.toLocaleString()}
+                        </p>
+                      )}
+                      {selectedPlot.pricing?.showTotalPrice !== false && (
+                        <p className="font-semibold text-lg">
+                          Total Price: ₹
+                          {selectedPlot.pricing.totalPrice.toLocaleString()}
+                        </p>
+                      )}
+                    </>
+                  ) : (
+                    <p className="text-gray-500 italic">Contact for pricing</p>
+                  )}
                 </div>
                 <div>
                   <h3 className="font-semibold">Features</h3>
@@ -366,29 +437,195 @@ const Plots = () => {
                 </div>
               </div>
 
-              {/* Booking Section */}
+              {/* Booking Section with Payment Type Selection */}
               {selectedPlot.status === "available" && !bookingResponse && (
-                <div className="border-t pt-4">
-                  <h3 className="font-semibold mb-2">Book Plot</h3>
-                  <Alert className="mb-4 bg-blue-50 border-blue-200">
+                <div className="border-t pt-4 space-y-4">
+                  <h3 className="font-semibold text-lg flex items-center gap-2">
+                    <CreditCard className="h-5 w-5" />
+                    Book This Plot
+                  </h3>
+                  
+                  {/* Payment Type Selection */}
+                  <div className="bg-gray-50 p-4 rounded-lg">
+                    <Label className="text-base font-medium mb-3 block">
+                      Choose Payment Option
+                    </Label>
+                    <RadioGroup
+                      value={paymentType}
+                      onValueChange={setPaymentType}
+                      className="grid grid-cols-1 sm:grid-cols-2 gap-3"
+                    >
+                      <div className={`flex items-start space-x-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                        paymentType === "full" 
+                          ? "border-blue-500 bg-blue-50" 
+                          : "border-gray-200 hover:border-gray-300"
+                      }`}>
+                        <RadioGroupItem value="full" id="full" className="mt-1" />
+                        <div className="flex-1">
+                          <Label htmlFor="full" className="flex items-center gap-2 cursor-pointer font-medium">
+                            <Banknote className="h-4 w-4 text-green-600" />
+                            Full Payment
+                          </Label>
+                          <p className="text-sm text-gray-600 mt-1">
+                            Pay the entire amount at once
+                          </p>
+                          {selectedPlot.pricing?.showPriceToUser !== false && selectedPlot.pricing?.showTotalPrice !== false && (
+                            <p className="text-sm font-semibold text-green-600 mt-1">
+                              ₹{(selectedPlot.pricing?.totalPrice || 0).toLocaleString()}
+                            </p>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Show installment option if enabled AND showInstallmentPrices is true */}
+                      {selectedPlot.installmentPlan?.enabled && 
+                       selectedPlot.pricing?.showInstallmentPrices !== false && (
+                        <div className={`flex items-start space-x-3 p-3 border rounded-lg cursor-pointer transition-all ${
+                          paymentType === "installment" 
+                            ? "border-blue-500 bg-blue-50" 
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}>
+                          <RadioGroupItem 
+                            value="installment" 
+                            id="installment" 
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <Label htmlFor="installment" className="flex items-center gap-2 cursor-pointer font-medium">
+                              <Calendar className="h-4 w-4 text-orange-600" />
+                              Pay in Installments
+                            </Label>
+                            <p className="text-sm text-gray-600 mt-1">
+                              Flexible EMI options available
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </RadioGroup>
+                  </div>
+
+                  {/* Installment Plan Selection & Preview */}
+                  {paymentType === "installment" && 
+                   selectedPlot.installmentPlan?.enabled && 
+                   selectedPlot.pricing?.showInstallmentPrices !== false && (
+                    <div className="bg-orange-50 p-4 rounded-lg space-y-4">
+                      {/* Plan Selection */}
+                      {selectedPlot.installmentPlan?.plans?.length > 0 && (
+                        <div>
+                          <Label className="mb-2 block">Select Installment Plan</Label>
+                          <Select
+                            value={selectedPlanName}
+                            onValueChange={setSelectedPlanName}
+                          >
+                            <SelectTrigger className="bg-white">
+                              <SelectValue placeholder="Choose a plan" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {selectedPlot.installmentPlan.plans
+                                .filter(plan => plan.isActive)
+                                .map((plan) => (
+                                  <SelectItem key={plan.planName} value={plan.planName}>
+                                    {plan.planName} - {plan.numberOfInstallments} EMIs @ {plan.downPaymentPercent}% down
+                                  </SelectItem>
+                                ))
+                              }
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      )}
+
+                      {/* Installment Preview */}
+                      {installmentPreview && (
+                        <div className="bg-white p-4 rounded-lg border border-orange-200">
+                          <h4 className="font-semibold mb-3 flex items-center gap-2">
+                            <IndianRupee className="h-4 w-4" />
+                            Payment Breakdown: {installmentPreview.planName}
+                          </h4>
+                          
+                          {/* Show rupee amounts only if showPriceToUser is true */}
+                          {selectedPlot.pricing?.showPriceToUser !== false ? (
+                            <>
+                              <div className="grid grid-cols-2 gap-3 text-sm">
+                                <div>
+                                  <p className="text-gray-600">Down Payment ({installmentPreview.downPaymentPercent}%)</p>
+                                  <p className="font-semibold">₹{installmentPreview.downPaymentAmount.toLocaleString()}</p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-600">No. of EMIs</p>
+                                  <p className="font-semibold">{installmentPreview.numberOfInstallments} months</p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-600">EMI Amount</p>
+                                  <p className="font-semibold">₹{installmentPreview.emiAmount.toLocaleString()}/month</p>
+                                </div>
+                                <div>
+                                  <p className="text-gray-600">Interest Rate</p>
+                                  <p className="font-semibold">{installmentPreview.interestRate}%</p>
+                                </div>
+                              </div>
+                              <div className="mt-3 pt-3 border-t">
+                                <div className="flex justify-between items-center">
+                                  <span className="font-medium">Total Payable Amount</span>
+                                  <span className="text-lg font-bold text-orange-600">
+                                    ₹{installmentPreview.totalPayable.toLocaleString()}
+                                  </span>
+                                </div>
+                                {installmentPreview.extraCost > 0 && (
+                                  <p className="text-xs text-gray-500 text-right mt-1">
+                                    (Interest: ₹{installmentPreview.extraCost.toLocaleString()})
+                                  </p>
+                                )}
+                              </div>
+                            </>
+                          ) : (
+                            <div className="grid grid-cols-2 gap-3 text-sm">
+                              <div>
+                                <p className="text-gray-600">Down Payment</p>
+                                <p className="font-semibold">{installmentPreview.downPaymentPercent}%</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-600">No. of EMIs</p>
+                                <p className="font-semibold">{installmentPreview.numberOfInstallments} months</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-600">Interest Rate</p>
+                                <p className="font-semibold">{installmentPreview.interestRate}%</p>
+                              </div>
+                              <div>
+                                <p className="text-gray-600">Pricing</p>
+                                <p className="text-sm text-orange-600">Contact for details</p>
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  <Alert className="bg-blue-50 border-blue-200">
                     <Info className="h-4 w-4 text-blue-600" />
                     <AlertDescription className="text-blue-800 text-sm">
-                      System auto-detects your team. Booking needs admin approval.
-                      Token amount can be 0.
+                      Your booking request will be sent for admin approval. 
+                      Payment details will be finalized after approval.
                     </AlertDescription>
                   </Alert>
+
                   <Button
                     onClick={handleBookPlot}
                     disabled={bookingLoading}
                     className="w-full"
+                    size="lg"
                   >
                     {bookingLoading ? (
                       <>
                         <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                        Booking...
+                        Processing...
                       </>
                     ) : (
-                      "Request Booking"
+                      <>
+                        <CreditCard className="h-4 w-4 mr-2" />
+                        Request Booking ({paymentType === "full" ? "Full Payment" : "Installments"})
+                      </>
                     )}
                   </Button>
                 </div>
@@ -409,8 +646,8 @@ const Plots = () => {
                     selectedPlot.status === "available"
                       ? "outline"
                       : selectedPlot.status === "pending"
-                      ? "secondary"
-                      : "destructive"
+                        ? "secondary"
+                        : "destructive"
                   }
                 >
                   {selectedPlot.status}

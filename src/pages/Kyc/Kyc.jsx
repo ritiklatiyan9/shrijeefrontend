@@ -372,14 +372,14 @@ const KYCPage = () => {
             {statusInfo.icon}
           </div>
           <h2 className="text-2xl font-bold text-gray-800 mb-2">{statusInfo.text}</h2>
-          
+
           {kycStatus.panNumber && (
             <div className="mt-4 bg-white rounded-lg p-4 shadow-sm">
               <p className="text-gray-600 font-medium">PAN Number</p>
               <p className="text-xl font-bold text-gray-800">{kycStatus.panNumber}</p>
             </div>
           )}
-          
+
           {kycStatus.aadharNumber && (
             <div className="mt-4 bg-white rounded-lg p-4 shadow-sm">
               <p className="text-gray-600 font-medium">Aadhar Number</p>
@@ -408,7 +408,7 @@ const KYCPage = () => {
             </div>
           )}
 
-    
+
 
           {status === 'rejected' && (
             <div className="mt-6 bg-red-100 rounded-lg p-4">
@@ -473,7 +473,7 @@ const KYCPage = () => {
               </CardHeader>
               <CardContent>
                 {renderKycStatus()}
-                
+
                 <div className="mt-6 text-center">
                   <Button
                     onClick={fetchKycStatus}
@@ -504,11 +504,10 @@ const KYCPage = () => {
               </CardHeader>
               <CardContent>
                 {message.text && (
-                  <div className={`mb-6 p-4 rounded-lg text-center ${
-                    message.type === 'success' ? 'bg-green-100 text-green-700' :
+                  <div className={`mb-6 p-4 rounded-lg text-center ${message.type === 'success' ? 'bg-green-100 text-green-700' :
                       message.type === 'error' ? 'bg-red-100 text-red-700' :
                         'bg-blue-100 text-blue-700'
-                  }`}>
+                    }`}>
                     {message.type === 'success' && <CheckCircle className="inline mr-2 w-5 h-5" />}
                     {message.type === 'error' && <XCircle className="inline mr-2 w-5 h-5" />}
                     {message.type === 'info' && <Loader2 className="inline mr-2 w-5 h-5 animate-spin" />}
@@ -576,7 +575,7 @@ const KYCPage = () => {
                         <Upload className="mr-2 w-5 h-5" />
                         Upload Documents
                       </h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         {/* PAN Document */}
                         <div className="space-y-4">
@@ -659,7 +658,7 @@ const KYCPage = () => {
                             />
                           </label>
                         </div>
-                        
+
                         {previews.additional.length > 0 && (
                           <div className="mt-4 grid grid-cols-2 sm:grid-cols-3 gap-3">
                             {previews.additional.map((previewUrl, index) => (

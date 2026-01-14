@@ -1,7 +1,7 @@
 // api/userService.js
 import axios from 'axios';
 
-const API_BASE_URL =  'https://shreejeebackend.onrender.com/api/v1';
+const API_BASE_URL = 'https://shreejeebackend.onrender.com/api/v1';
 
 // Create axios instance with default config
 const apiClient = axios.create({
@@ -15,10 +15,10 @@ const apiClient = axios.create({
 // Add request interceptor to include auth token
 apiClient.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token') || 
-                  localStorage.getItem('authToken') || 
-                  localStorage.getItem('accessToken');
-    
+    const token = localStorage.getItem('token') ||
+      localStorage.getItem('authToken') ||
+      localStorage.getItem('accessToken');
+
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
@@ -39,7 +39,7 @@ apiClient.interceptors.response.use(
         const refreshResponse = await axios.post(`${API_BASE_URL}/users/refresh-token`, {}, {
           withCredentials: true
         });
-        
+
         if (refreshResponse.data?.data?.accessToken) {
           localStorage.setItem('token', refreshResponse.data.data.accessToken);
           // Retry the original request
@@ -65,7 +65,7 @@ export const userService = {
   },
 
   // Update profile with image
- updateProfile: async (formData) => {
+  updateProfile: async (formData) => {
     const response = await apiClient.put('/users/update', formData, {
       headers: {
         'Content-Type': 'multipart/form-data', // Correctly set for FormData
@@ -84,7 +84,7 @@ export const userService = {
   uploadProfileImage: async (file) => {
     const formData = new FormData();
     formData.append('profileImage', file);
-    
+
     const response = await apiClient.post('/users/upload-profile-image', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',

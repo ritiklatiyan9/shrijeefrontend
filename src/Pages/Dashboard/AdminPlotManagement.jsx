@@ -72,7 +72,7 @@ const AdminPlotManagement = () => {
       });
       const plots = data.data.plots || [];
       setAllPlots(plots);
-      
+
       // Extract unique cities
       const uniqueCities = [
         ...new Set(plots.map((p) => p.siteLocation.address.city)),
@@ -295,7 +295,7 @@ const AdminPlotManagement = () => {
               )}
             </SelectContent>
           </Select>
-          
+
           <Select
             value={filters.siteName}
             onValueChange={(value) => setFilters({ ...filters, siteName: value })}
@@ -316,7 +316,7 @@ const AdminPlotManagement = () => {
               )}
             </SelectContent>
           </Select>
-          
+
           <Select
             value={filters.status}
             onValueChange={(value) => setFilters({ ...filters, status: value })}
@@ -331,7 +331,7 @@ const AdminPlotManagement = () => {
               <SelectItem value="sold">Sold</SelectItem>
             </SelectContent>
           </Select>
-          
+
           <Input
             placeholder="Min Price"
             type="number"
@@ -350,7 +350,7 @@ const AdminPlotManagement = () => {
             }
             className="w-32"
           />
-          <Button 
+          <Button
             onClick={() => setFilters({ city: "", siteName: "", status: "", minPrice: "", maxPrice: "" })}
             disabled={loading}
           >
@@ -462,8 +462,8 @@ const AdminPlotManagement = () => {
                         selectedPlot.bookingDetails.status === "approved"
                           ? "default"
                           : selectedPlot.bookingDetails.status === "rejected"
-                          ? "destructive"
-                          : "secondary"
+                            ? "destructive"
+                            : "secondary"
                       }
                     >
                       {selectedPlot.bookingDetails.status}

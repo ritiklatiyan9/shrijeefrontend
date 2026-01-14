@@ -112,8 +112,8 @@ const UserNode = ({ data }) => {
             </div>
             <div>
               <span className="text-xs text-gray-500">Status</span>
-              <Badge 
-                variant={user.status === 'active' ? 'default' : 'secondary'} 
+              <Badge
+                variant={user.status === 'active' ? 'default' : 'secondary'}
                 className="ml-1 text-xs py-0"
               >
                 {user.status || 'pending'}
@@ -152,14 +152,14 @@ const nodeTypes = {
 const getSubtreeWidth = (node) => {
   if (!node || !node._id) return 0;
   if (!node.children || node.children.length === 0) return 1;
-  
+
   let width = 0;
   node.children.forEach(child => {
     if (child && child._id) {
       width += getSubtreeWidth(child);
     }
   });
-  
+
   return Math.max(width, 1);
 };
 
@@ -175,7 +175,7 @@ const BinaryTreeComponent = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/binary-tree', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
@@ -207,28 +207,28 @@ const BinaryTreeComponent = () => {
 
     const allNodes = [];
     const allEdges = [];
-    
+
     // Configuration - compact but readable
     const NODE_WIDTH = 290;       // Actual node width (w-72 = 288px)
     const NODE_HEIGHT = 170;      // Approximate node height
     const H_GAP = 30;             // Horizontal gap between adjacent nodes
     const V_GAP = 60;             // Vertical gap between levels
-    
+
     const UNIT_WIDTH = NODE_WIDTH + H_GAP;
-    
+
     // Process node with intelligent positioning
     const processNode = (node, level, leftBoundary, parentId = null) => {
       if (!node || !node._id) return leftBoundary;
-      
+
       const nodeId = node._id;
       const isRoot = !parentId;
       const subtreeWidth = getSubtreeWidth(node);
-      
+
       // Calculate x position - center of this node's allocated space
       const allocatedWidth = subtreeWidth * UNIT_WIDTH;
       const centerX = leftBoundary + (allocatedWidth / 2) - (NODE_WIDTH / 2);
       const y = level * (NODE_HEIGHT + V_GAP);
-      
+
       // Create the node
       allNodes.push({
         id: nodeId,
@@ -236,7 +236,7 @@ const BinaryTreeComponent = () => {
         position: { x: centerX, y },
         data: { user: node, isRoot },
       });
-      
+
       // Create edge from parent
       if (parentId) {
         allEdges.push({
@@ -250,11 +250,11 @@ const BinaryTreeComponent = () => {
           targetHandle: 'top',
         });
       }
-      
+
       // Process children - allocate space proportionally based on their subtree sizes
       if (node.children && Array.isArray(node.children)) {
         let childLeftBoundary = leftBoundary;
-        
+
         node.children.forEach((child) => {
           if (child && child._id) {
             const childWidth = getSubtreeWidth(child);
@@ -263,13 +263,13 @@ const BinaryTreeComponent = () => {
           }
         });
       }
-      
+
       return leftBoundary + allocatedWidth;
     };
-    
+
     // Start processing from root
     processNode(tree, 0, 0, null);
-    
+
     return { nodes: allNodes, edges: allEdges };
   }, []);
 
@@ -283,9 +283,9 @@ const BinaryTreeComponent = () => {
   useEffect(() => {
     if (treeData) {
       console.log("Tree data received:", treeData);
-      
+
       const { nodes: treeNodes, edges: treeEdges } = buildNodesAndEdges(treeData);
-      
+
       console.log("Generated Nodes:", treeNodes);
       console.log("Generated Edges:", treeEdges);
 
@@ -293,7 +293,7 @@ const BinaryTreeComponent = () => {
         setError('No valid user data found in the binary tree structure.');
         return;
       }
-      
+
       setNodes(treeNodes);
       setEdges(treeEdges);
     }

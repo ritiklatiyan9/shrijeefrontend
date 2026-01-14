@@ -557,21 +557,21 @@ const UserManagement = () => {
                         </Button>
                       )}
                       {selectedUser.kycDocuments?.additionalDocuments &&
-                       selectedUser.kycDocuments.additionalDocuments.length > 0 && (
-                        <div className="flex gap-2">
-                          {selectedUser.kycDocuments.additionalDocuments.map((doc, index) => (
-                            <Button
-                              key={index}
-                              size="sm"
-                              variant="outline"
-                              onClick={() => window.open(doc.url, '_blank', 'noopener,noreferrer')}
-                            >
-                              <ExternalLink className="mr-2 h-4 w-4" />
-                              Additional Doc {index + 1}
-                            </Button>
-                          ))}
-                        </div>
-                      )}
+                        selectedUser.kycDocuments.additionalDocuments.length > 0 && (
+                          <div className="flex gap-2">
+                            {selectedUser.kycDocuments.additionalDocuments.map((doc, index) => (
+                              <Button
+                                key={index}
+                                size="sm"
+                                variant="outline"
+                                onClick={() => window.open(doc.url, '_blank', 'noopener,noreferrer')}
+                              >
+                                <ExternalLink className="mr-2 h-4 w-4" />
+                                Additional Doc {index + 1}
+                              </Button>
+                            ))}
+                          </div>
+                        )}
                     </div>
                   </div>
                   {selectedUser.kycDocuments?.rejectionReason && (

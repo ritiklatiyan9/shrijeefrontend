@@ -172,9 +172,11 @@ const RightTeamBookings = () => {
       { label: "Total Area", value: `${selectedPlot.size?.value} ${selectedPlot.size?.unit}` },
       { label: "Total Price", value: formatCurrencyNoSymbol(selectedPlot.pricing?.totalPrice) },
       { label: "Paid Amount", value: formatCurrencyNoSymbol(selectedPlot.bookingDetails?.totalPaidAmount) },
-      { label: "Balance Due", value: formatCurrencyNoSymbol(
-        (selectedPlot.pricing?.totalPrice || 0) - (selectedPlot.bookingDetails?.totalPaidAmount || 0)
-      ) },
+      {
+        label: "Balance Due", value: formatCurrencyNoSymbol(
+          (selectedPlot.pricing?.totalPrice || 0) - (selectedPlot.bookingDetails?.totalPaidAmount || 0)
+        )
+      },
     ];
 
     priceDetails.forEach((detail, index) => {
@@ -226,11 +228,11 @@ const RightTeamBookings = () => {
         ],
       ],
       body: paymentSchedule,
-      styles: { 
+      styles: {
         fontSize: 10,
         cellPadding: 5,
       },
-      headStyles: { 
+      headStyles: {
         fillColor: [30, 144, 255], // Dodger Blue
         textColor: [255, 255, 255],
         fontStyle: 'bold',

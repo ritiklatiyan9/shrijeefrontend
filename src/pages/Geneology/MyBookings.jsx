@@ -44,7 +44,7 @@ const MyBookings = () => {
     setLoading(true);
     try {
       const { data } = await apiClient.get("/user/plots/my-bookings");
-      
+
       if (data.success) {
         setBookings(data.data.plots || []);
       }
@@ -87,7 +87,7 @@ const MyBookings = () => {
 
   const handleCancelBooking = async () => {
     if (!selectedPlot) return;
-    
+
     setCancelLoading(true);
     try {
       const { data } = await apiClient.post(
@@ -104,7 +104,7 @@ const MyBookings = () => {
     } catch (error) {
       alert(
         "Cancellation failed: " +
-          (error.response?.data?.message || "Unknown error")
+        (error.response?.data?.message || "Unknown error")
       );
     } finally {
       setCancelLoading(false);

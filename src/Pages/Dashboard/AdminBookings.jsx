@@ -41,7 +41,7 @@ const AdminBookings = () => {
       if (activeTab !== "all") {
         params.position = activeTab;
       }
-      
+
       const { data } = await api.get("/admin/plots/bookings", { params });
       console.log("Bookings data:", data.data.bookings); // Debug log
       setBookings(data.data.bookings || []);
@@ -74,7 +74,7 @@ const AdminBookings = () => {
   };
 
   const getStatsForTab = () => {
-    switch(activeTab) {
+    switch (activeTab) {
       case "left": return stats.left;
       case "right": return stats.right;
       default: return stats.total;
@@ -149,7 +149,7 @@ const AdminBookings = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="shadow-lg border-t-4 border-t-green-500">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -168,7 +168,7 @@ const AdminBookings = () => {
             </div>
           </CardContent>
         </Card>
-        
+
         <Card className="shadow-lg border-t-4 border-t-purple-500">
           <CardContent className="p-6">
             <div className="flex items-center justify-between">
@@ -195,10 +195,10 @@ const AdminBookings = () => {
           <div className="flex justify-between items-center">
             <div>
               <CardTitle className="text-2xl font-bold">
-                {activeTab === "all" 
-                  ? "All Bookings" 
-                  : activeTab === "left" 
-                    ? "Left Team Bookings" 
+                {activeTab === "all"
+                  ? "All Bookings"
+                  : activeTab === "left"
+                    ? "Left Team Bookings"
                     : "Right Team Bookings"}
               </CardTitle>
               <p className="text-sm text-gray-500 mt-1">
@@ -305,8 +305,8 @@ const AdminBookings = () => {
                                 position === "left"
                                   ? "bg-green-100 text-green-800"
                                   : position === "right"
-                                  ? "bg-purple-100 text-purple-800"
-                                  : "bg-gray-100 text-gray-800"
+                                    ? "bg-purple-100 text-purple-800"
+                                    : "bg-gray-100 text-gray-800"
                               }
                             >
                               {position?.toUpperCase() || "N/A"}
@@ -336,8 +336,8 @@ const AdminBookings = () => {
                                 plot.bookingDetails?.status === "approved"
                                   ? "bg-green-100 text-green-800"
                                   : plot.bookingDetails?.status === "rejected"
-                                  ? "bg-red-100 text-red-800"
-                                  : "bg-yellow-100 text-yellow-800"
+                                    ? "bg-red-100 text-red-800"
+                                    : "bg-yellow-100 text-yellow-800"
                               }
                             >
                               {plot.bookingDetails?.status?.toUpperCase()}
