@@ -6,13 +6,13 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { 
-  MdHome, 
-  MdLocationOn, 
-  MdAttachMoney, 
-  MdAdd, 
-  MdClose, 
-  MdCheckCircle, 
+import {
+  MdHome,
+  MdLocationOn,
+  MdAttachMoney,
+  MdAdd,
+  MdClose,
+  MdCheckCircle,
   MdError,
   MdExpandMore,
   MdExpandLess,
@@ -234,8 +234,8 @@ const CreatePlotForm = () => {
     if (!formData.pricing.totalPrice || formData.pricing.totalPrice <= 0) {
       errors.push('Total Price must be greater than 0');
     }
-    if (formData.pricing.totalPrice && formData.pricing.basePrice && 
-        Number(formData.pricing.totalPrice) < Number(formData.pricing.basePrice)) {
+    if (formData.pricing.totalPrice && formData.pricing.basePrice &&
+      Number(formData.pricing.totalPrice) < Number(formData.pricing.basePrice)) {
       errors.push('Total Price cannot be less than Base Price');
     }
 
@@ -283,9 +283,9 @@ const CreatePlotForm = () => {
 
     if (payload.siteLocation?.address) {
       Object.keys(payload.siteLocation.address).forEach(key => {
-        if (payload.siteLocation.address[key] === '' || 
-            payload.siteLocation.address[key] === null || 
-            payload.siteLocation.address[key] === undefined) {
+        if (payload.siteLocation.address[key] === '' ||
+          payload.siteLocation.address[key] === null ||
+          payload.siteLocation.address[key] === undefined) {
           delete payload.siteLocation.address[key];
         }
       });
@@ -304,9 +304,9 @@ const CreatePlotForm = () => {
       const errors = validateForm();
       if (errors.length > 0) {
         setValidationErrors(errors);
-        setSubmitMessage({ 
-          type: 'error', 
-          text: 'Please fix the validation errors below' 
+        setSubmitMessage({
+          type: 'error',
+          text: 'Please fix the validation errors below'
         });
         setIsSubmitting(false);
         return;
@@ -329,17 +329,17 @@ const CreatePlotForm = () => {
       });
 
       if (!response.ok) {
-        const errorData = await response.json().catch(() => ({ 
-          message: 'Failed to parse error response' 
+        const errorData = await response.json().catch(() => ({
+          message: 'Failed to parse error response'
         }));
         throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
       }
 
       const result = await response.json();
       console.log('Plot created successfully:', result);
-      setSubmitMessage({ 
-        type: 'success', 
-        text: 'Plot created successfully! Redirecting...' 
+      setSubmitMessage({
+        type: 'success',
+        text: 'Plot created successfully! Redirecting...'
       });
 
       setTimeout(() => {
@@ -348,9 +348,9 @@ const CreatePlotForm = () => {
 
     } catch (error) {
       console.error('Error creating plot:', error);
-      setSubmitMessage({ 
-        type: 'error', 
-        text: error.message || 'An error occurred while creating the plot.' 
+      setSubmitMessage({
+        type: 'error',
+        text: error.message || 'An error occurred while creating the plot.'
       });
     } finally {
       setIsSubmitting(false);
@@ -358,7 +358,7 @@ const CreatePlotForm = () => {
   };
 
   const SectionHeader = ({ icon: Icon, title, isExpanded, onToggle, isOptional = false }) => (
-    <div 
+    <div
       className="flex items-center justify-between cursor-pointer py-3 px-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-lg hover:from-blue-100 hover:to-indigo-100 transition-all duration-200 mb-4"
       onClick={onToggle}
     >
@@ -397,11 +397,10 @@ const CreatePlotForm = () => {
 
           <CardContent className="p-6 sm:p-8">
             {submitMessage.text && (
-              <div className={`mb-6 p-4 rounded-xl flex items-start gap-3 shadow-lg ${
-                submitMessage.type === 'success' 
-                  ? 'bg-green-50 text-green-800 border-2 border-green-200' 
+              <div className={`mb-6 p-4 rounded-xl flex items-start gap-3 shadow-lg ${submitMessage.type === 'success'
+                  ? 'bg-green-50 text-green-800 border-2 border-green-200'
                   : 'bg-red-50 text-red-800 border-2 border-red-200'
-              }`}>
+                }`}>
                 {submitMessage.type === 'success' ? (
                   <MdCheckCircle className="text-2xl mt-0.5 flex-shrink-0 text-green-600" />
                 ) : (
@@ -511,9 +510,9 @@ const CreatePlotForm = () => {
 
               {/* Dimensions - Optional */}
               <div className="space-y-4">
-                <SectionHeader 
-                  icon={MdStraighten} 
-                  title="Plot Dimensions" 
+                <SectionHeader
+                  icon={MdStraighten}
+                  title="Plot Dimensions"
                   isExpanded={expandedSections.dimensions}
                   onToggle={() => toggleSection('dimensions')}
                   isOptional
@@ -810,9 +809,9 @@ const CreatePlotForm = () => {
 
               {/* Features */}
               <div className="space-y-4">
-                <SectionHeader 
-                  icon={MdApartment} 
-                  title="Plot Features" 
+                <SectionHeader
+                  icon={MdApartment}
+                  title="Plot Features"
                   isExpanded={expandedSections.features}
                   onToggle={() => toggleSection('features')}
                   isOptional
@@ -855,7 +854,7 @@ const CreatePlotForm = () => {
                         />
                       </div>
                     </div>
-                    
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                       <div className="flex items-center space-x-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
                         <Checkbox
@@ -909,9 +908,9 @@ const CreatePlotForm = () => {
 
               {/* Nearby Amenities */}
               <div className="space-y-4">
-                <SectionHeader 
-                  icon={MdLocationOn} 
-                  title="Nearby Amenities" 
+                <SectionHeader
+                  icon={MdLocationOn}
+                  title="Nearby Amenities"
                   isExpanded={expandedSections.amenities}
                   onToggle={() => toggleSection('amenities')}
                   isOptional
@@ -989,9 +988,9 @@ const CreatePlotForm = () => {
 
               {/* Legal Information */}
               <div className="space-y-4">
-                <SectionHeader 
-                  icon={MdGavel} 
-                  title="Legal Information" 
+                <SectionHeader
+                  icon={MdGavel}
+                  title="Legal Information"
                   isExpanded={expandedSections.legal}
                   onToggle={() => toggleSection('legal')}
                   isOptional
@@ -1069,9 +1068,9 @@ const CreatePlotForm = () => {
 
               {/* Description & Highlights */}
               <div className="space-y-4">
-                <SectionHeader 
-                  icon={MdDescription} 
-                  title="Description & Highlights" 
+                <SectionHeader
+                  icon={MdDescription}
+                  title="Description & Highlights"
                   isExpanded={expandedSections.highlights}
                   onToggle={() => toggleSection('highlights')}
                   isOptional
@@ -1145,9 +1144,9 @@ const CreatePlotForm = () => {
 
               {/* Submit Button */}
               <div className="pt-6 border-t-2">
-                <Button 
-                  type="submit" 
-                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200" 
+                <Button
+                  type="submit"
+                  className="w-full h-14 text-lg font-semibold bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 shadow-lg hover:shadow-xl transition-all duration-200"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (

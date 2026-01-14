@@ -107,9 +107,9 @@ const UserNode = ({ data }) => {
             )}
           </div>
 
-         
 
-        
+
+
         </CardContent>
       </Card>
 
@@ -147,7 +147,7 @@ const CompanyTreeComponent = () => {
     try {
       setLoading(true);
       setError(null);
-      
+
       const response = await fetch('https://shreejeebackend.onrender.com/api/v1/users/company-tree', {
         headers: {
           'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
@@ -176,11 +176,11 @@ const CompanyTreeComponent = () => {
 
   // Build nodes and edges for the tree
   const buildNodesAndEdges = (tree, parentId = null, level = 0, index = 0) => {
-   const calculateNodePosition = (level, index) => {
+    const calculateNodePosition = (level, index) => {
       // Increased spacing for better visual separation
       const baseXSpacing = 400; // Increased horizontal spacing
       const baseYSpacing = 350; // Significantly increased vertical spacing to prevent overlap
-      
+
       // Calculate position based on level and index within the level
       const nodesAtThisLevel = Math.pow(2, level);
       const levelWidth = nodesAtThisLevel * baseXSpacing;
@@ -208,9 +208,9 @@ const CompanyTreeComponent = () => {
       id: nodeId,
       type: 'userNode',
       position: nodePosition,
-      data: { 
-        user: tree, 
-        isRoot 
+      data: {
+        user: tree,
+        isRoot
       },
       width: 320,
       height: 200,
@@ -226,7 +226,7 @@ const CompanyTreeComponent = () => {
         source: parentId, // Parent node ID
         target: nodeId,   // Current node ID
         type: 'default', // Changed to 'default' for curved lines
-        style: { 
+        style: {
           stroke: '#3b82f6',
           strokeWidth: 2,
         },
@@ -249,9 +249,9 @@ const CompanyTreeComponent = () => {
           // Calculate index for the child in its level
           const childIndexInLevel = (index * 2) + childIndex;
           const { nodes: childNodes, edges: childEdges } = buildNodesAndEdges(
-            child, 
+            child,
             nodeId, // Current node becomes the parent for its children
-            level + 1, 
+            level + 1,
             childIndexInLevel // Pass the calculated index
           );
           allNodes = [...allNodes, ...childNodes];
@@ -272,9 +272,9 @@ const CompanyTreeComponent = () => {
   useEffect(() => {
     if (treeData) {
       console.log("Company Tree data received:", treeData);
-      
+
       const { nodes: treeNodes, edges: treeEdges } = buildNodesAndEdges(treeData);
-      
+
       console.log("Generated Nodes:", treeNodes);
       console.log("Generated Edges:", treeEdges);
 
@@ -282,7 +282,7 @@ const CompanyTreeComponent = () => {
         setError('No valid user data found in the company tree structure.');
         return;
       }
-      
+
       setNodes(treeNodes);
       setEdges(treeEdges);
     }
@@ -338,7 +338,7 @@ const CompanyTreeComponent = () => {
         nodeTypes={memoizedNodeTypes}
         fitView
         // Increased padding, especially the top/bottom (y-axis) padding to account for vertical spacing
-        fitViewOptions={{ 
+        fitViewOptions={{
           padding: 0.5, // Increased from 0.3 to 0.5
           minZoom: 0.1,
           maxZoom: 1.5,
@@ -347,7 +347,7 @@ const CompanyTreeComponent = () => {
         maxZoom={1.5}
         defaultEdgeOptions={{
           type: 'default', // Changed default edge type to 'default' for curves
-          style: { 
+          style: {
             stroke: '#3b82f6',
             strokeWidth: 2,
           },

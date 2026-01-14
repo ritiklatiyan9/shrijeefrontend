@@ -87,6 +87,9 @@ function AppSidebar() {
     { name: 'User Management', path: '/dashboard/admin-user-management', icon: <UsersIcon className="text-purple-500" /> },
     { name: 'KYC Management', path: '/dashboard/admin-kyc-management', icon: <FileCheck className="text-green-500" /> },
     { name: 'Create Plots', path: '/dashboard/create-plot', icon: <MdManageAccounts className="text-red-500" /> },
+    { name: 'Edit Plots', path: '/dashboard/admin-plot-crud', icon: <Home className="text-emerald-500" /> },
+    { name: 'Installment & Price Settings', path: '/dashboard/admin-installment-management', icon: <GiRank3 className="text-orange-500" /> },
+    { name: 'Payment Dashboard', path: '/dashboard/admin-payment-dashboard', icon: <FaUserShield className="text-green-600" /> },
     { name: 'Plot Booking Requests', path: '/dashboard/admin-plot-management', icon: <Home className="text-sky-500" /> },
     { name: 'Income Approval', path: '/dashboard/admin-approve-income', icon: <GiRank3 className="text-yellow-600" /> },
     { name: 'Bookings', path: '/dashboard/admin-bookings', icon: <FaUserShield className="text-yellow-500" /> },
@@ -99,6 +102,7 @@ function AppSidebar() {
     { name: 'Left Team Bookings', path: '/dashboard/left-team-bookings', icon: <FaUserShield className="text-yellow-500" /> },
     { name: 'Right Team Bookings', path: '/dashboard/right-team-bookings', icon: <FaUserShield className="text-yellow-500" /> },
     { name: 'My Bookings', path: '/dashboard/my-bookings', icon: <FaUserShield className="text-yellow-500" /> },
+    { name: 'My Payments', path: '/dashboard/payment-tracker', icon: <GiRank3 className="text-green-500" /> },
   ];
   const isBookingsSectionActive = bookingsSubItems.some(item => location.pathname === item.path);
 

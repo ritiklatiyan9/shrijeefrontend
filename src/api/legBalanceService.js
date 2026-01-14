@@ -1,7 +1,7 @@
 // api/legBalanceService.js - Leg Balance & Carry-Forward API Service
 import axios from 'axios';
 
-const API_BASE_URL ='https://shreejeebackend.onrender.com';
+const API_BASE_URL = 'https://shreejeebackend.onrender.com';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -47,7 +47,7 @@ api.interceptors.response.use(
         });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-        
+
         // Store new tokens
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', newRefreshToken);
@@ -55,7 +55,7 @@ api.interceptors.response.use(
         // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
-        
+
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
         // Clear tokens and redirect to login
@@ -126,10 +126,10 @@ export const fetchUnmatchedSales = async (userId, leg = 'both') => {
   try {
     const params = new URLSearchParams();
     if (leg) params.append('leg', leg);
-    
+
     const queryString = params.toString();
     const url = `/${userId}/unmatched${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching unmatched sales:', error);
@@ -162,7 +162,7 @@ export const fetchUnmatchedSales = async (userId, leg = 'both') => {
 export const fetchAllLegBalances = async (options = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     if (options.page) params.append('page', options.page);
     if (options.limit) params.append('limit', options.limit);
     if (options.sortBy) params.append('sortBy', options.sortBy);
@@ -170,7 +170,7 @@ export const fetchAllLegBalances = async (options = {}) => {
 
     const queryString = params.toString();
     const url = `/admin/all${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching all leg balances:', error);

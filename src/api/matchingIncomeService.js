@@ -1,7 +1,7 @@
 // api/matchingIncomeService.js - Complete API Service
 import axios from 'axios';
 
-const API_BASE_URL =  'https://shreejeebackend.onrender.com';
+const API_BASE_URL = 'https://shreejeebackend.onrender.com';
 
 // Create axios instance with default config
 const api = axios.create({
@@ -47,7 +47,7 @@ api.interceptors.response.use(
         });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data.data;
-        
+
         // Store new tokens
         localStorage.setItem('accessToken', accessToken);
         localStorage.setItem('refreshToken', newRefreshToken);
@@ -55,7 +55,7 @@ api.interceptors.response.use(
         // Retry the original request with new token
         originalRequest.headers.Authorization = `Bearer ${accessToken}`;
         return axios(originalRequest);
-        
+
       } catch (refreshError) {
         console.error('Token refresh failed:', refreshError);
         // Clear tokens and redirect to login
@@ -84,7 +84,7 @@ api.interceptors.response.use(
 export const fetchUserMatchingIncome = async (userId, filters = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     if (filters.incomeType) params.append('incomeType', filters.incomeType);
     if (filters.status) params.append('status', filters.status);
     if (filters.legType) params.append('legType', filters.legType);
@@ -97,7 +97,7 @@ export const fetchUserMatchingIncome = async (userId, filters = {}) => {
 
     const queryString = params.toString();
     const url = `/user/${userId}${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching user matching income:', error);
@@ -137,14 +137,14 @@ export const fetchPlotIncomeDetails = async (plotId) => {
 export const fetchIncomeSummary = async (userId, options = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     if (options.startDate) params.append('startDate', options.startDate);
     if (options.endDate) params.append('endDate', options.endDate);
     if (options.groupBy) params.append('groupBy', options.groupBy);
 
     const queryString = params.toString();
     const url = `/summary/${userId}${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching income summary:', error);
@@ -165,7 +165,7 @@ export const fetchIncomeSummary = async (userId, options = {}) => {
 export const fetchTeamMatchingIncome = async (userId, filters = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     if (filters.incomeType) params.append('incomeType', filters.incomeType);
     if (filters.status) params.append('status', filters.status);
     if (filters.legType) params.append('legType', filters.legType);
@@ -179,7 +179,7 @@ export const fetchTeamMatchingIncome = async (userId, filters = {}) => {
 
     const queryString = params.toString();
     const url = `/team/${userId}${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching team matching income:', error);
@@ -204,7 +204,7 @@ export const fetchTeamMatchingIncome = async (userId, filters = {}) => {
 export const getAllIncomeRecords = async (filters = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     if (filters.incomeType) params.append('incomeType', filters.incomeType);
     if (filters.status) params.append('status', filters.status);
     if (filters.legType) params.append('legType', filters.legType);
@@ -219,7 +219,7 @@ export const getAllIncomeRecords = async (filters = {}) => {
 
     const queryString = params.toString();
     const url = `/admin/all${queryString ? `?${queryString}` : ''}`;
-    
+
     return await api.get(url);
   } catch (error) {
     console.error('Error fetching all income records:', error);
@@ -335,14 +335,14 @@ export const updateIncomeStatus = async (recordId, data) => {
 export const exportIncomeRecords = async (filters = {}) => {
   try {
     const params = new URLSearchParams();
-    
+
     Object.keys(filters).forEach(key => {
       if (filters[key]) params.append(key, filters[key]);
     });
 
     const queryString = params.toString();
     const url = `/admin/export${queryString ? `?${queryString}` : ''}`;
-    
+
     const response = await axios.get(`${API_BASE_URL}/api/matching-income${url}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('accessToken')}`, // ✅ Fixed: Changed from 'token' to 'accessToken'
@@ -398,7 +398,7 @@ export default {
   fetchPlotIncomeDetails,
   fetchIncomeSummary,
   fetchTeamMatchingIncome,
-  
+
   // Admin Methods
   getAllIncomeRecords,
   getDashboardStats,
@@ -406,7 +406,7 @@ export default {
   bulkApproveIncome,
   rejectMatchingIncome,
   updateIncomeStatus,
-  
+
   // Utility Methods
   exportIncomeRecords,
   calculatePotentialIncome
