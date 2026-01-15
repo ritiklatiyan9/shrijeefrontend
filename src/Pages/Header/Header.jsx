@@ -16,6 +16,7 @@ import {
   FaLandmark,
   FaClipboardList,
   FaWarehouse,
+  FaTrophy,
 } from "react-icons/fa";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -53,14 +54,10 @@ function Header() {
       icon: <FaBuilding />,
       subLinks: [
         { name: "All Properties", path: "/property" },
-        { name: "Residential", path: "/property/residential" },
-        { name: "Commercial", path: "/property/commercial" },
-        { name: "Plots / Land", path: "/property/plots" },
-        { name: "Rent / Lease", path: "/property/rent" },
-        { name: "New Projects", path: "/property/new-projects" },
       ],
     },
-    { name: "Agents", path: "/agents", icon: <FaLandmark /> },
+    // { name: "Agents", path: "/agents", icon: <FaLandmark /> },
+    { name: "Connect", path: "/connect", icon: <FaTrophy /> },
     { name: "Contact Us", path: "/contact", icon: <FaPhoneAlt /> },
   ];
 
@@ -93,7 +90,7 @@ function Header() {
                 onMouseLeave={() => setIsDropdownOpen(false)}
               >
                 <button
-                  className={`flex items-center gap-1 text-white px-4 py-2 rounded-full hover:bg-white/20 transition ${location.pathname.startsWith("/property")
+                  className={`flex items-center gap-1 text-white px-4 py-2 rounded-3xl md:rounded-full hover:bg-white/20 transition ${location.pathname.startsWith("/property")
                     ? "bg-white/25"
                     : ""
                     }`}

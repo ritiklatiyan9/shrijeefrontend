@@ -231,7 +231,7 @@ export default function AboutUsPage() {
 
         {/* Testimonials */}
         <div className="pt-10">
-          <Testimonials.Testimonials />
+          <Testimonials />
         </div>
 
       </div>
