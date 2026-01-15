@@ -13,6 +13,7 @@ import AboutUsPage from './Pages/Header/Aboutus';
 import PropertyPage from './Pages/Property/Properties';
 import AgentsPage from './Pages/Agents/AgentsPage';
 import ContactUs from './Pages/Header/ContactUs';
+import Connect from './Pages/Connect/Connect';
 
 // Dashboard Pages
 import DashboardHome from './Pages/Home/Dashboard.jsx';
@@ -34,10 +35,6 @@ import RightTeamBookings from './Pages/Geneology/RightTeamBooking';
 import MyBookings from './Pages/Geneology/MyBookings';
 import AdminPlotManagement from './Pages/Dashboard/AdminPlotManagement';
 import AdminBookings from './Pages/Dashboard/AdminBookings';
-import AdminPlotCRUD from './Pages/Dashboard/AdminPlotCRUD';
-import AdminInstallmentManagement from './Pages/Dashboard/AdminInstallmentManagement';
-import AdminPaymentDashboard from './Pages/Dashboard/AdminPaymentDashboard';
-import PaymentTracker from './Pages/Dashboard/PaymentTracker';
 
 import MatchingIncomeDashboard from './Pages/Dashboard/MatchingIncomeDashboard';
 import AdminApproveIncome from './Pages/Dashboard/AdminApproveIncome';
@@ -48,7 +45,7 @@ import './fonts.css';
 // Protected Route Component
 function ProtectedRoute({ children }) {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -56,14 +53,14 @@ function ProtectedRoute({ children }) {
       </div>
     );
   }
-  
+
   return user ? children : <Navigate to="/login" replace />;
 }
 
 // Public Route Component (redirects to dashboard if logged in)
 function PublicRoute({ children }) {
   const { user, loading } = useAuth();
-  
+
   if (loading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -71,7 +68,7 @@ function PublicRoute({ children }) {
       </div>
     );
   }
-  
+
   return !user ? children : <Navigate to="/dashboard/profile" replace />;
 }
 
@@ -108,31 +105,37 @@ function App() {
                 <Home />
               </PublicLayout>
             } />
-            
+
             <Route path="/about" element={
               <PublicLayout>
                 <AboutUsPage />
               </PublicLayout>
             } />
-            
+
             <Route path="/property" element={
               <PublicLayout>
                 <PropertyPage />
               </PublicLayout>
             } />
-            
+
             <Route path="/property/:type" element={
               <PublicLayout>
                 <PropertyPage />
               </PublicLayout>
             } />
-            
+
             <Route path="/agents" element={
               <PublicLayout>
                 <AgentsPage />
               </PublicLayout>
             } />
-            
+
+            <Route path="/connect" element={
+              <PublicLayout>
+                <Connect />
+              </PublicLayout>
+            } />
+
             <Route path="/contact" element={
               <PublicLayout>
                 <ContactUs />
@@ -140,21 +143,21 @@ function App() {
             } />
 
             {/* Auth Routes - Only accessible when NOT logged in */}
-      <Route path="/login" element={
-  <PublicRoute>
-    <PublicLayout>
-      <Login />
-    </PublicLayout>
-  </PublicRoute>
-} />
+            <Route path="/login" element={
+              <PublicRoute>
+                <PublicLayout>
+                  <Login />
+                </PublicLayout>
+              </PublicRoute>
+            } />
 
-<Route path="/signup" element={
-  <PublicRoute>
-    <PublicLayout>
-      <Signup />
-    </PublicLayout>
-  </PublicRoute>
-} />
+            <Route path="/signup" element={
+              <PublicRoute>
+                <PublicLayout>
+                  <Signup />
+                </PublicLayout>
+              </PublicRoute>
+            } />
 
             {/* Protected Dashboard Routes */}
             <Route path="/dashboard" element={
@@ -184,15 +187,11 @@ function App() {
 
               <Route path="admin-plot-management" element={<AdminPlotManagement />} />
               <Route path="admin-bookings" element={<AdminBookings />} />
-              <Route path="admin-plot-crud" element={<AdminPlotCRUD />} />
-              <Route path="admin-installment-management" element={<AdminInstallmentManagement />} />
-              <Route path="admin-payment-dashboard" element={<AdminPaymentDashboard />} />
-              <Route path="payment-tracker" element={<PaymentTracker />} />
               <Route path="matching-income" element={<MatchingIncomeDashboard />} />
               <Route path="admin-approve-income" element={<AdminApproveIncome />} />
               <Route path="team-income" element={<TeamIncomeDashboard />} />
               <Route path="rewards" element={<Rewards />} />
-             
+
             </Route>
 
             {/* Redirect any unknown routes */}

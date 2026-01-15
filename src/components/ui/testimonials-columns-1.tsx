@@ -3,9 +3,15 @@ import React from "react";
 import { motion } from "motion/react";
 
 
+interface Testimonial {
+  text: string;
+  image: string;
+  name: string;
+}
+
 export const TestimonialsColumn = (props: {
   className?: string;
-  testimonials: typeof testimonials;
+  testimonials: Testimonial[];
   duration?: number;
 }) => {
   return (

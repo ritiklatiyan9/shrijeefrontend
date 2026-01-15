@@ -4,38 +4,38 @@ import { motion } from "motion/react";
 const testimonials = [
   {
     text: "Buying property with Shree Jee Real Estate was a dream come true. They helped me find a beautiful plot in a serene location that exceeded my expectations.",
-    image: "https://images.unsplash.com/photo-1494790108755-2616b612b786?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Briana Patton",
+    image: "https://media.licdn.com/dms/image/v2/D5635AQFs3OP4XB67Ow/profile-framedphoto-shrink_400_400/B56ZrNoWsZJUAc-/0/1764386499798?e=1768917600&v=beta&t=6hEG6WSF5AuvNaL1CnnEjnem5s7xhcxkOOZFJLO3wHY",
+    name: "Abhinav Choudhary",
   },
   {
     text: "The process of purchasing land was incredibly smooth. Their team guided me every step of the way, ensuring I made the right investment for my future.",
-    image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Bilal Ahmed",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQE0epUdy8Y_8g/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1722691844280?e=1769644800&v=beta&t=n8m6gl0TsdAze-cSvbC9zgujsycdgdoVvsI1aPjiDTY",
+    name: "Ritik",
   },
   {
     text: "I was looking for a peaceful environment for my family, and Shree Jee delivered. The location is breathtaking, surrounded by nature and tranquility.",
-    image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Sanam Malik",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQH2eWkHLL5SAw/profile-displayphoto-scale_400_400/B56Zq9ljnGHQAg-/0/1764117331589?e=1769644800&v=beta&t=s2KnFAH3F2PoCAW5e8vmOdZJy3BwBtBmtmOJFJfY_sE",
+    name: "Arjit Malik",
   },
   {
     text: "Their transparency and dedication are unmatched. I felt confident investing in my plot, knowing I was in safe hands with Shree Jee Real Estate.",
-    image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Omar Raza",
+    image: "https://media.licdn.com/dms/image/v2/D4D03AQGPcoyHdmAslA/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1674529384256?e=1769644800&v=beta&t=u5VrF1Xm80B8V67eu0kSRDtv6G1QqKPcDU1inee3dmM",
+    name: "Ashu Choudhary",
   },
   {
     text: "The best decision I ever made was choosing Shree Jee. The serene atmosphere of the location is exactly what I needed to escape the city noise.",
-    image: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQFWB4kgkZotPw/profile-displayphoto-shrink_400_400/profile-displayphoto-shrink_400_400/0/1724646895872?e=1769644800&v=beta&t=8K1p9aXOUgIY6899FT3MY-uMz-5W3e8EAWMjVExtFYY",
     name: "Zainab Hussain",
   },
   {
     text: "Great experience! They understood my needs perfectly and showed me plots that were not only affordable but also in prime, peaceful areas.",
-    image: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
+    image: "https://media.licdn.com/dms/image/v2/D5635AQGiF2YI__Y85g/profile-framedphoto-shrink_400_400/profile-framedphoto-shrink_400_400/0/1715706270316?e=1768917600&v=beta&t=5c5iAUKmyOKYd-A9mo9n9bHlPzkaA2wZeUTZH88eiUU",
     name: "Aliza Khan",
   },
   {
     text: "I highly recommend Shree Jee Real Estate for anyone looking to buy land. Their commitment to quality and customer satisfaction is evident.",
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Farhan Siddiqui",
+    name: "Farha khan",
   },
   {
     text: "Finding a plot that offered both value and serenity was hard until I met the Shree Jee team. They made it happen effortlessly.",
@@ -44,8 +44,8 @@ const testimonials = [
   },
   {
     text: "A truly professional team. They helped me secure a fantastic piece of land where I can build my dream home in a calm and beautiful setting.",
-    image: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-4.0.3&auto=format&fit=crop&w=40&h=40&q=80",
-    name: "Hassan Ali",
+    image: "https://media.licdn.com/dms/image/v2/D5603AQEo7ScJqHSOpA/profile-displayphoto-shrink_400_400/B56ZPwOzNkGsAg-/0/1734902232581?e=1769644800&v=beta&t=ic4D7t6O_w9S8CZbASqC3PMyFI7OEtOEiz_sWavzQr4",
+    name: "Nitin Kapasiya",
   },
 ];
 
@@ -89,4 +89,4 @@ const Testimonials = () => {
   );
 };
 
-export default { Testimonials };
+export default Testimonials;
