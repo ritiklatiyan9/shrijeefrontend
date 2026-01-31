@@ -35,6 +35,9 @@ import RightTeamBookings from './Pages/Geneology/RightTeamBooking';
 import MyBookings from './Pages/Geneology/MyBookings';
 import AdminPlotManagement from './Pages/Dashboard/AdminPlotManagement';
 import AdminBookings from './Pages/Dashboard/AdminBookings';
+import AdminPlotCRUD from './Pages/Dashboard/AdminPlotCRUD';
+import AdminInstallmentManagement from './Pages/Dashboard/AdminInstallmentManagement';
+import AdminPaymentDashboard from './Pages/Dashboard/AdminPaymentDashboard';
 
 import MatchingIncomeDashboard from './Pages/Dashboard/MatchingIncomeDashboard';
 import AdminApproveIncome from './Pages/Dashboard/AdminApproveIncome';
@@ -186,6 +189,9 @@ function App() {
               <Route path="my-bookings" element={<MyBookings />} />
 
               <Route path="admin-plot-management" element={<AdminPlotManagement />} />
+              <Route path="admin-plot-crud" element={<AdminPlotCRUD />} />
+              <Route path="admin-installment-management" element={<AdminInstallmentManagement />} />
+              <Route path="admin-payment-dashboard" element={<AdminPaymentDashboard />} />
               <Route path="admin-bookings" element={<AdminBookings />} />
               <Route path="matching-income" element={<MatchingIncomeDashboard />} />
               <Route path="admin-approve-income" element={<AdminApproveIncome />} />
