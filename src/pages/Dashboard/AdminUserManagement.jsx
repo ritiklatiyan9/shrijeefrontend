@@ -191,6 +191,19 @@ const UserManagement = () => {
     }
   };
 
+  // Permanently delete user and associated KYC records
+  const handlePermanentDelete = async (userId) => {
+    if (!confirm('Permanently delete this user and all associated KYC records? This action cannot be undone.')) return;
+    try {
+      await apiClient.delete(`/users/${userId}?permanentDelete=true`);
+      toast.success('User permanently deleted');
+      fetchUsers(currentPage);
+    } catch (error) {
+      console.error('Error permanently deleting user:', error);
+      toast.error(error.response?.data?.message || 'Failed to permanently delete user');
+    }
+  };
+
   const getStatusBadge = (status) => {
     const variants = {
       active: 'default',
@@ -408,6 +421,14 @@ const UserManagement = () => {
                               >
                                 <Trash2 className="mr-2 h-4 w-4" />
                                 Block User
+                              </DropdownMenuItem>
+                              <DropdownMenuSeparator />
+                              <DropdownMenuItem
+                                onClick={() => handlePermanentDelete(user._id)}
+                                className="text-red-700"
+                              >
+                                <XCircle className="mr-2 h-4 w-4" />
+                                Permanently Delete
                               </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
